@@ -1,69 +1,78 @@
 const User = require("../models/userSchema");
-const bcrypt = require("bcryptjs") ;
+const bcrypt = require("bcryptjs");
 
-    const home = async(req,res)=>{
-    try{
-        res
-        .status(200)
-        .send("Created successfully using router and controllers");
+const home = async (req, res) => {
+  try {
+    res.status(200).send("Created successfully using router and controllers");
+  } catch (err) {
+    console.log(`Error is:${err.message}`);
+  }
+};
 
-    } catch(err){
-            console.log(`Error is:${err.message}`);
+const registration = async (req, res, next) => {
+  try {
+    const { fullName, email, password, confirmPassword } = req.body;
+
+    // Check if user exists
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      return res.status(409).json({ msg: "User already exists" });
     }
-    }                   
 
-    const registration = async(req,res) => {
-    try {
-            const{fullName, email, password, confirmPassword } = req.body;
 
-            //Check if user exists
-            const userExist = await User.findOne({email});
-
-            if(userExist){
-                return res.status(409).json({msg:"User already exists"});
-            }
-            //password and confirm password compare
-               if (password !== confirmPassword) {
+    if (password !== confirmPassword) {
       return res.status(400).json({ msg: "Passwords do not match" });
     }
-            //   const isMatch = await bcrypt.compare(password, User.password);
 
-            // if (!isMatch) 
-            // {
-            //     return res.status(401).json({ msg: "Invalid email or password" });
-            // }
+    const userCreated = await User.create({ fullName, email, password });
 
-                //if not then
-                const newUser = await User.create({fullName, email, password});
+    res.status(201).json({
+      msg: "Registration Successfull",
+      token: await userCreated.generateToken(),
+      user: {
+        id: userCreated._id.toString(),
+        fullName: userCreated.fullName,
+        email: userCreated.email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-                res.status(201).json({
-                msg:"Registration Successfull",
-                 user: { id: newUser._id, fullName: newUser.fullName, email: newUser.email },
-                });
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-             
-        } catch (error) {
-            console.log(`Error is:${error.message}`);
-            return res.status(500).json({ error: error.message});
-        }
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email and password are required" });
+    }
 
+    const userExist = await User.findOne({ email });
+    if (!userExist) {
+      return res.status(401).json({ msg: "Invalid Credentials" });
     }
 
 
-    const login = async(req,res) => {
-        try{
-            const {email, password} = req.body;
-
-     // 1. Check required fields
-        if (!email || !password) {
-         return res.status(400).json({ msg: "Email and password are required" });
-        }
-
-
-        } catch (error) {
-            console.log(`Error is:${error.message}`);
-            return res.status(500).json({ error: error.message});
-        }
-        
+    const isMatch = await userExist.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ msg: "Invalid email or password" });
     }
-    module.exports = {home,registration,login}
+    
+    res.status(200).json({
+      msg: "Login Successfull",
+      token: await userExist.generateToken(),
+      userId: userExist._id.toString(),
+      user: {
+        id: userExist._id.toString(),
+        fullName: userExist.fullName,
+        email: userExist.email,
+      },
+    });
+  } catch (error) {
+    console.log(`Error is:${error.message}`);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { home, registration, login };

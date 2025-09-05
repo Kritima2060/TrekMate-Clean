@@ -13,6 +13,7 @@ import Review from "./pages/Review";
 import Error from "./pages/Error";
 import Faqs from "./pages/Faqs";
 import Contact from "./pages/contact";
+import TrekHome from "./pages/trekHome";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="/emergencyAlert" element={<EmergencyAlert/>}/>
         <Route path="/admin" element={<Admin/>}/>
         <Route path="/review" element={<Review/>}/>
+        <Route path="/trekhome" element={<TrekHome/>}/>
         <Route path="/beginyourjourney" element={<BeginYourJourney/>}/>
         <Route path="/error" element={<Error/>}/>
         <Route path="/faqs" element={<Faqs/>}/>

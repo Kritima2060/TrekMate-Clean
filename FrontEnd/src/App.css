@@ -1,66 +1,11 @@
 @import "tailwindcss";
 *{
-  margin: 0 ;
-  padding:0;
   list-style: none;
   font-family: 'Roboto', sans-serif;
   text-decoration: none;
 }
 
 
-/* ********* Naviagtion Bar********* */
-
-nav{
-  display: flex;
-  align-items: center;
-  gap: 20em;
-  
-}
-
-.header {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px 100px;
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-  gap: 15em;
-  position: sticky;
-    z-index: 999;
-    top: 0px;
-}
-
-.header .logo {
-  width:6em;
-}
-
-.header nav a {
-  margin: 0 18px;
-  text-decoration: none;
-  color: #333;
-}
-
-.login {
-  background: #4A6C84;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-}
-
-.login:hover ,.submit:hover{
-  color: #4A6C84;
-  background-color: #fff;
-  border: 0.1px solid #4A6C84;
-  border-radius: 5px;
-  padding: 7px 14px;
-}
-.aboutus , .faqs ,.contactus ,.submit{
-  color: black;
-}
-.aboutus:hover , .faqs:hover , .contactus:hover , .submit {
-  color:#4A6C84;
-}
 
 /* HomePage.css */
 
@@ -681,7 +626,6 @@ padding: 5px 0px;
 }
 
 .submit{
-   background: #4A6C84;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -841,16 +785,51 @@ textarea {
   font-weight: bold;
 }
 
-button[type="submit"] {
-  background-color: #4A6C84;
+button[type="button"] {
+
   color: white;
+
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+
+}
+button[type="button"]:hover{
+  color:black;
+  background-color: #fff;
+   border-radius: 5px;
+   border:1px solid #4A6C84 ;
+
+}
+
+button[type="submit"] {
+
+  color: white;
+
   padding: 10px;
   border: none;
   border-radius: 6px;
 
 }
 button[type="submit"]:hover{
-   color: #4A6C84;
+  color:black;
+  background-color: #fff;
+   border-radius: 5px;
+   border:1px solid #4A6C84 ;
+
+}
+
+button[type="submit"] {
+
+  color: white;
+
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+
+}
+button[type="submit"]:hover{
+  color:black;
   background-color: #fff;
    border-radius: 5px;
    border:1px solid #4A6C84 ;

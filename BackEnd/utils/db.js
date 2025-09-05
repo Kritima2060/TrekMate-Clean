@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
+const URI = process.env.MONGODB_URI;
 
 const connectDb = async () => {
-  await mongoose.connect(
-    "mongodb+srv://khatiwadakritima12:MongoDB2060@authusers.zsmkhcv.mongodb.net/TrekMate"
-  );
-  
+  try{
+  await mongoose.connect(URI);
+} catch (error){
+    console.error("Database connection failed",error);
+    process.exit(1);
+}
 
 }; 
 module.exports = connectDb;               

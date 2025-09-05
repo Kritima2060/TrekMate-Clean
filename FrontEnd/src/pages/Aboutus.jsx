@@ -1,3 +1,6 @@
+// Replace all instances of "text-indigo-600" with "text-[#e74c3c]"
+// Also update any accent color in button backgrounds if needed
+
 import "../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
@@ -8,212 +11,124 @@ import chatbot from "../assets/chatbot.svg";
 import weatherimage from "../assets/weather-alerts.svg";
 import reviewImg1 from "../assets/reviewAvatar1.svg";
 
-
-import {
-  faPhone,
-  faEnvelope,
-  faMapMarkerAlt,
-} from "@fortawesome/free-solid-svg-icons";
-
+import { faPhone, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const AboutUs = () => {
   return (
-    <div className="about-container">
-      <section className="about-hero">
-        <h1>About US</h1>
-        <p>TrekMate – Your Smart Trekking Companion.</p>
+    <div className="bg-neutral-50 min-h-screen text-neutral-800 font-sans">
+      <section className="text-center py-16 bg-neutral-100 px-6">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-3">About Us</h1>
+        <p className="text-lg md:text-xl text-neutral-700 max-w-2xl mx-auto">
+          TrekMate – Your Smart Trekking Companion.
+        </p>
       </section>
 
-      <section className="why-trekmate-container">
-        <div className="why-trekmate-image-conatiner">
-          <img src={why_trekmate_img} />
+      <section className="flex flex-col md:flex-row items-center gap-8 py-16 px-6 max-w-7xl mx-auto">
+        <div className="md:w-1/2">
+          <img src={why_trekmate_img} alt="Why TrekMate" className="rounded-xl  w-full" />
         </div>
-        <div className="why-trekmate-text">
-          <h2>
-            Why <span className="highlight">TrekMate</span>
+        <div className="md:w-1/2 space-y-6">
+          <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
+            Why <span className="text-[#e74c3c]">TrekMate</span>
           </h2>
-          <p>
-            <b>
-              <strong>TrekMate</strong> - is your smart trekking companion.
-            </b>
+          <p className="text-neutral-700 text-lg leading-relaxed">
+            <strong>TrekMate</strong> is your smart trekking companion. It simplifies planning, ensures safety, and enhances every step of your journey. From first-time hikes to remote trails, TrekMate integrates weather alerts, accommodation info, and local services into a single platform.
           </p>
-          <p>
-            <span className="highlight">TrekMate </span> is a powerful web
-            application built to simplify and enhance your trekking experience.
-            Whether you're planning your first hike or exploring remote trails,{" "}
-            <span className="highlight">TrekMate</span> brings everything you
-            need into one smart, easy-to-use platform. Our goal is to solve real
-            problems trekkers face — from uncertain weather and lack of
-            accommodation details to safety concerns in remote areas.
-            <span className="highlight">TrekMate</span> connects you with local
-            services, provides personalized recommendations, and keeps you
-            informed at every step of your journey.
+          <p className="text-neutral-700 text-lg leading-relaxed font-medium">
+            Plan better. Trek smarter. Stay safe. With <span className="text-[#e74c3c]">TrekMate</span>.
           </p>
-          <b>
-            <p>
-              <span className="highlight">TrekMate</span> is more than just a
-              planning tool — it’s your reliable digital partner for smart,
-              secure, and memorable adventures.
-            </p>
-          </b>
-
-          <b>
-            <p>
-              Plan better. Trek smarter. Stay safe. With{" "}
-              <span className="highlight">TrekMate.</span>
-            </p>
-          </b>
         </div>
       </section>
-      <div>
-        <section className="sos-chatbot">
-          <Link to="/error">
-            <img src={chatbot} className="chatbot" />
-          </Link>
-          <br />
-          <Link to="/emergencyAlert">
-            <img src={sos} className="sos" />
-          </Link>
-          <Link to="/error">
-            <img src={weatherimage} className="weather-alert" />
-          </Link>
-        </section>
-      </div>
 
-      <section className="features-aboutus">
-        <h2>Navigate with these features:</h2>
-        <ul>
-          <li>
-            <strong>01</strong> AI-based trekking assistance
-          </li>
-          <li>
-            <strong>02</strong> Real-Time Weather Alerts
-          </li>
-          <li>
-            <strong>03</strong> Emergency SOS with Real-Time GPS Sharing
-          </li>
-          <li>
-            <strong>04</strong> Homestay Booking with Verified Listings
-          </li>
-          <li>
-            <strong>05</strong> Photo-Based User Reviews
-          </li>
+      <section className="flex justify-center gap-10 py-12 px-6">
+        <Link to="/error" className="cursor-pointer hover:opacity-80 transition" title="AI Chat Assistance">
+          <img src={chatbot} alt="Chatbot" className="w-16 h-16 md:w-20 md:h-20" />
+        </Link>
+        <Link to="/emergencyAlert" className="cursor-pointer hover:opacity-80 transition" title="Emergency SOS">
+          <img src={sos} alt="SOS" className="w-16 h-16 md:w-20 md:h-20" />
+        </Link>
+        <Link to="/error" className="cursor-pointer hover:opacity-80 transition" title="Weather Alerts">
+          <img src={weatherimage} alt="Weather Alert" className="w-16 h-16 md:w-20 md:h-20" />
+        </Link>
+      </section>
+
+      <section className="max-w-5xl mx-auto py-16 px-6 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-8">Navigate with these features:</h2>
+        <ul className="grid md:grid-cols-2 gap-6 list-decimal list-inside text-left md:text-left text-neutral-700 text-lg">
+          <li>AI-based trekking assistance</li>
+          <li>Real-Time Weather Alerts</li>
+          <li>Emergency SOS with Real-Time GPS Sharing</li>
+          <li>Homestay Booking with Verified Listings</li>
+          <li>Photo-Based User Reviews</li>
         </ul>
       </section>
 
-      <section className="testimonials">
-        <div className="testimonials-container">
-          <h2>
-            What{" "}
-            <span className="highlight">
-              Our <br /> Travellers
-            </span>{" "}
-            Are Saying ?
+      <section className="bg-neutral-100 py-16 px-6">
+        <div className="max-w-5xl mx-auto text-center space-y-6">
+          <h2 className="text-3xl md:text-4xl font-semibold mb-3">
+            What <span className="text-[#e74c3c]">Our Travellers</span> Are Saying
           </h2>
-          <p>
-            At TrekMate, nothing matters more than the experiences of our users.
-            Read their stories and see why TrekMate is the trusted companion for
-            trekking enthusiasts across Nepal and beyond.
+          <p className="text-neutral-700 text-lg max-w-3xl mx-auto leading-relaxed">
+            At TrekMate, nothing matters more than the experiences of our users. See why TrekMate is trusted across Nepal and beyond.
           </p>
           <Link to="/review">
-            <button className="reviews-btn">View More</button>
+            <button className="bg-[#e74c3c] hover:bg-[#c0392b] text-white py-3 px-8 rounded-xl text-lg font-medium cursor-pointer transition" title="View More Reviews">
+              View More
+            </button>
           </Link>
         </div>
 
-        <div className="testimonial">
-          <div className="review-box-container">
-            <img src={reviewImg1} />
-            <div className="review-container">
-              <div className="name-icon">
-                <h3>Sushma R., Pokhara</h3>
-                <span>
-                  <FontAwesomeIcon
-                    icon={faQuoteLeft}
-                    size="2x"
-                    flip="horizontal"
-                  />
-                </span>
+        <div className="mt-12 max-w-3xl mx-auto">
+          <div className="flex flex-col md:flex-row items-start gap-6 bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer">
+            <img src={reviewImg1} alt="User Review" className="w-20 h-20 rounded-full object-cover" />
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-neutral-900 text-lg md:text-xl">Sushma R., Pokhara</h3>
+                <FontAwesomeIcon icon={faQuoteLeft} size="2x" flip="horizontal" className="text-neutral-400" />
               </div>
-              <p>
-                "TrekMate made my solo trek feel like a guided adventure. The AI
-                suggestions and weather updates were spot-on!"
+              <p className="text-neutral-700 text-base md:text-lg leading-relaxed">
+                "TrekMate made my solo trek feel like a guided adventure. The AI suggestions and weather updates were spot-on!"
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="features">
-        <div className="features-text-container">
-          <h2>Why Choose TrekMate ?</h2>
-          <p>
-            TrekMate isn't just a trekking app—it's your ultimate adventure
-            companion, designed to make every step of your journey smarter,
-            safer, and more memorable. Whether you’re a first-time trekker or a
-            seasoned explorer, here’s why thousands choose TrekMate:
+      <section className="max-w-6xl mx-auto py-16 px-6">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-semibold mb-4">Why Choose TrekMate?</h2>
+          <p className="text-neutral-700 text-lg max-w-3xl mx-auto leading-relaxed">
+            TrekMate is your ultimate adventure companion. Smarter, safer, and more memorable trekking for every explorer.
           </p>
         </div>
 
-        <ul>
-          <li className="budget-friendly">
-            <h2>01</h2>
-            <b>
-              <p>Budget-Friendly</p>
-            </b>
-            <p>
-              We provide every package with top-notch services at affordable
-              prices based on your requirements.
-            </p>
-          </li>
-          <li className="flexible-itineraries">
-            <h2>02</h2>
-            <b>
-              <p>Flexible Itineraries</p>
-            </b>
-            <p>
-              No two trekkers are the same—so why should your trek be? With
-              TrekMate, you can customize your itinerary to match your
-              interests, pace, and goals.
-            </p>
-          </li>
-          <li className="safety-comes-first">
-            <h2>03</h2>
-            <b>
-              <p>Safety Comes First</p>
-            </b>
-            <p>
-              Stay protected with features like SOS alerts, GPS tracking, fall
-              detection, and offline access. Even in remote areas, TrekMate has
-              your back.
-            </p>
-          </li>
-          <li className="support">
-            <h2>04</h2>
-            <b>
-              <p>24/7 Support</p>
-            </b>
-            <p>
-              We’re with you every step of the way. Whether you’re planning your
-              trek or facing an issue on the trail, our support team is
-              available 24/7.
-            </p>
-          </li>
-        </ul>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer">
+            <h3 className="text-[#e74c3c] font-bold text-2xl mb-2">01 Budget-Friendly</h3>
+            <p className="text-neutral-700 text-lg leading-relaxed">Top-notch services at affordable prices based on your requirements.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer">
+            <h3 className="text-[#e74c3c] font-bold text-2xl mb-2">02 Flexible Itineraries</h3>
+            <p className="text-neutral-700 text-lg leading-relaxed">Customize your itinerary to match your interests, pace, and goals.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer">
+            <h3 className="text-[#e74c3c] font-bold text-2xl mb-2">03 Safety Comes First</h3>
+            <p className="text-neutral-700 text-lg leading-relaxed">Features like SOS alerts, GPS tracking, and offline access ensure your protection.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition cursor-pointer">
+            <h3 className="text-[#e74c3c] font-bold text-2xl mb-2">04 24/7 Support</h3>
+            <p className="text-neutral-700 text-lg leading-relaxed">Our team is available around the clock, from planning to on-trail assistance.</p>
+          </div>
+        </div>
       </section>
 
-      <section className="contact-us">
-        <h2>Let’s Stay Connected</h2>
-        <div className="contact-info">
-          <div>
-            <FontAwesomeIcon icon={faEnvelope} /> trekmate@gmail.com
-          </div>
-          <div>
-            <FontAwesomeIcon icon={faPhone} /> 9812345678
-          </div>
-          <div>
-            <FontAwesomeIcon icon={faMapMarkerAlt} /> Birtamode, Bargachi
-          </div>
+      <section className="bg-neutral-100 py-16 px-6 text-center">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-8">Let’s Stay Connected</h2>
+        <div className="flex flex-col md:flex-row justify-center gap-10 text-neutral-700 text-lg md:text-xl">
+          <div className="flex items-center gap-3"><FontAwesomeIcon icon={faEnvelope} /> trekmate@gmail.com</div>
+          <div className="flex items-center gap-3"><FontAwesomeIcon icon={faPhone} /> 9812345678</div>
+          <div className="flex items-center gap-3"><FontAwesomeIcon icon={faMapMarkerAlt} /> Birtamode, Bargachi</div>
         </div>
       </section>
     </div>

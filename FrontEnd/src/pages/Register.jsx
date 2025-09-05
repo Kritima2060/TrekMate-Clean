@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../App.css";
+
+const URL = "http://localhost:5555/api/auth/register";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,8 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,25 +21,46 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // client-side validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!!");
+      alert("Passwords do not match!");
       return;
     }
 
-    // In real apps, send this data to your backend/API
-    console.log("User Registered:", formData);
+    try {
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Clear form after submission
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Registration successful:", responseData);
+
+        // reset form
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+
+        // redirect to login
+        navigate("/login");
+      } else {
+        console.error("Server responded with error:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
+
   return (
     <div className="register-container">
       <div className="register-box">

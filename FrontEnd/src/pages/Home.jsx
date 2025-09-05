@@ -1,4 +1,8 @@
 import "../App.css";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
+
 import templeImage from "../assets/patan.svg";
 import banner from "../assets/banner.svg";
 import templeImage3 from "../assets/patan3.svg";
@@ -12,288 +16,200 @@ import sos from "../assets/sos.svg";
 import chatbot from "../assets/chatbot.svg";
 import weatherimage from "../assets/weather-alerts.svg";
 
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
-
-const HomePage  = () => {
+const HomePage = () => {
   return (
-    <>
-      <section className="hero flex flex-col ">
-        <div class="flex justify-evenly">       
-        <div className="hero-text">
-          <h1>
+    <div className="bg-neutral-50 text-neutral-800 font-sans">
+      
+      <section className="hero flex flex-col md:flex-row items-center gap-12 py-16 px-6 max-w-7xl mb-32 mx-auto">
+        <div className="md:w-1/2 space-y-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-snug">
             Let <span className="highlight">TrekMate</span> Guide You —<br />
-            One Smart Step{" "}
-            <span className="highlight">
-              Closer to
-              <br /> Nature
-            </span>
-            .
+            One Smart Step <span className="highlight">Closer to Nature</span>.
           </h1>
-          <p>
-            <span className="highlight">Trekking</span> is the art of exploring
-            nature on foot — through mountains, forests, and rugged trails — one
-            step at a time. It’s a journey that blends adventure with
-            mindfulness, offering a deeper connection to the natural world while
-            challenging your body and refreshing your spirit.
+          <p className="text-lg md:text-xl leading-relaxed text-neutral-700">
+            <span className="highlight">TrekMate</span> simplifies trekking with AI assistance, real-time weather alerts, homestay bookings, reviews, and SOS features.
           </p>
-          <p>
-            <span className="highlight"> TrekMate </span>
-            is a comprehensive trekking web application designed to simplify and
-            enrich the trekking experience by offering AI based assistance,
-            real-time weather alerts, homestay booking, photo-based reviews, and
-            emergency SOS features.
-          </p>
-      <Link to="/beginyourjourney">
-        <button className="hover:cursor-pointer h-12 text-amber-50 hover:text-black bg-[#4A6C84] rounded-md hover:bg-amber-50  hover:border-2 w-40">Begin Your Journey</button>
-      </Link>
-        </div>
-        <div className="hero-images">
-          <div className="heroImage1_container">
-            <img src={templeImage} alt="templeImage" className="hero_img1" />
-          </div>
-          <div className="heroImage2_container">
-            <img src={banner} alt="templeimage2" className="hero_img2" />
-            <img src={templeImage3} alt="templeimage3" className="hero_img3" />
-          </div>
-        </div>
-        </div>
-      </section>
-      <section className="sos-chatbot">
-        <Link to="/error">
-        <img src={chatbot} className="chatbot" />
-        </Link>
-        <br />
-        <Link to="/emergencyalert">
-          <img src={sos} className="sos" />
-        </Link>
-        <Link to="/error">
-        <img src={weatherimage} className="weather-alert"/>
-        </Link>
-      </section>
-      <section className="destinations">
-        <div className="destination_container">
-          <h2>Top Destinations</h2>
-          <Link to="/topdestination">
-            <button className="see-all">See All Trips</button>
+          <Link to="/beginyourjourney">
+            <button className="cursor-pointer h-12 px-6 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md text-lg font-semibold transition" title="Start exploring trekking destinations">
+              Begin Your Journey
+            </button>
           </Link>
         </div>
-        <div className="cards">
-          <div className="card">
-            <img src={abcImage} alt="annpurnabasecamp" />
-            <span> Annapurna Base Camp Trek</span>
+
+        <div className="md:w-1/2 relative flex justify-center items-center gap-4">
+          <div className="relative z-10">
+            <img src={templeImage} alt="templeImage" className="rounded-xl shadow-lg w-full md:w-80" />
           </div>
-          <div className="card">
-            <img src={secDes} alt="EverestBaseCamp" />
-            <span>Everest Base Camp</span>
-          </div>
-          <div className="card">
-            <img src={ThirdDes} alt="EverestBaseCamp" />
-            <span>Langtang Region Trekking</span>
-          </div>
-          <div className="card">
-            <img src={fourthDes} alt="EverestBaseCamp" />
-            <span>Manaslu Region Trekking</span>
+          <div className="absolute right-0 top-12 flex flex-col gap-2">
+            <img src={banner} alt="banner" className="rounded-xl w-48 shadow-md" />
+            <img src={templeImage3} alt="templeImage3" className="rounded-xl w-48 shadow-md" />
           </div>
         </div>
       </section>
 
-      <section className="why-trekmate">
-        <div className="w-full">
-          <img src={why_trekmate_img} />
+      <section
+  id="always-on-left"
+  className="fixed bottom-6 left-6 flex flex-col gap-4 z-50"
+>
+  <Link
+    to="/error"
+    className="cursor-pointer hover:scale-105 transition"
+    title="Chatbot Assistance"
+  >
+    <img src={chatbot} alt="Chatbot" className="w-12 h-12 md:w-12 md:h-12" />
+  </Link>
+  <Link
+    to="/emergencyalert"
+    className="cursor-pointer hover:scale-105 transition"
+    title="Emergency SOS"
+  >
+    <img src={sos} alt="SOS" className="w-12 h-12 md:w-12 md:h-12" />
+  </Link>
+  <Link
+    to="/error"
+    className="cursor-pointer hover:scale-105 transition"
+    title="Weather Alerts"
+  >
+    <img
+      src={weatherimage}
+      alt="Weather Alert"
+      className="w-12 h-12 md:w-12 md:h-12"
+    />
+  </Link>
+</section>
+
+
+      <section className="destinations py-16 px-6 max-w-7xl mb-32 mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-semibold">Top Destinations</h2>
+          <Link to="/topdestination">
+            <button className="cursor-pointer bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-4 py-2 font-medium transition" title="See all trekking trips">
+              See All Trips
+            </button>
+          </Link>
         </div>
-        <div className="why-trekmate-text">
-          <h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
+            <img src={abcImage} alt="Annapurna Base Camp" className="w-full h-80 object-cover"/>
+            <span className="block p-2 text-center font-medium bg-white">{'Annapurna Base Camp Trek'}</span>
+          </div>
+          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
+            <img src={secDes} alt="Everest Base Camp" className="w-full h-80 object-cover"/>
+            <span className="block p-2 text-center font-medium bg-white">{'Everest Base Camp'}</span>
+          </div>
+          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
+            <img src={ThirdDes} alt="Langtang Region" className="w-full h-80 object-cover"/>
+            <span className="block p-2 text-center font-medium bg-white">{'Langtang Region Trekking'}</span>
+          </div>
+          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
+            <img src={fourthDes} alt="Manaslu Region" className="w-full h-80 object-cover"/>
+            <span className="block p-2 text-center font-medium bg-white">{'Manaslu Region Trekking'}</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="why-trekmate py-16 px-6 bg-neutral-100 flex flex-col md:flex-row items-center gap-12 max-w-7xl mx-auto">
+        <div className="md:w-1/2">
+          <img src={why_trekmate_img} alt="Why TrekMate" className="rounded-xl  w-full" />
+        </div>
+        <div className="md:w-1/2 space-y-6">
+          <h2 className="text-3xl md:text-4xl font-semibold">
             Why <span className="highlight">TrekMate</span>
           </h2>
-          <p>
-            <b>
-              <strong>TrekMate</strong> - is your smart trekking companion.
-            </b>
+          <p className="text-neutral-700 leading-relaxed font-medium">
+            <strong>TrekMate</strong> simplifies trekking by integrating weather alerts, accommodation details, and safety features into one intuitive platform.
           </p>
-          <p>
-            <span className="highlight">TrekMate </span> is a powerful web
-            application built to simplify and enhance your trekking experience.
-            Whether you're planning your first hike or exploring remote trails,{" "}
-            <span className="highlight">TrekMate</span> brings everything you
-            need into one smart, easy-to-use platform. Our goal is to solve real
-            problems trekkers face — from uncertain weather and lack of
-            accommodation details to safety concerns in remote areas.
-            <span className="highlight">TrekMate</span> connects you with local
-            services, provides personalized recommendations, and keeps you
-            informed at every step of your journey.
+          <p className="text-neutral-700 leading-relaxed">
+            Plan better. Trek smarter. Stay safe. With <span className="highlight">TrekMate</span>.
           </p>
-
-          <b>
-            <p>
-              Plan better. Trek smarter. Stay safe. With{" "}
-              <span className="highlight">TrekMate.</span>
-            </p>
-          </b>
-      <Link to="/aboutus">
-        <button className="hover:cursor-pointer h-12 text-amber-50 hover:text-black bg-[#4A6C84] rounded-md hover:bg-amber-50 hover:border-[#4A6C84] hover:border-2 w-40">Learn More</button>
-      </Link>
+          <Link to="/aboutus">
+            <button className="cursor-pointer h-12 px-6 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md text-lg font-semibold transition" title="Learn more about TrekMate">
+              Learn More
+            </button>
+          </Link>
         </div>
       </section>
 
-      <section className="faq">
-        <div className="faq_container">
-          <b>
-            <h2>
-              Any questions?
-              <br /> We got you.
-            </h2>
-      <Link to="/faqs">
-        <button className="hover:cursor-pointer h-12 text-amber-50 hover:text-black bg-[#4A6C84] rounded-md hover:bg-amber-50 hover:border-[#4A6C84] hover:border-2 w-40">Faq</button>
-      </Link>
-          </b>
-          
-          <p>
-            Got questions about <span className="highlight">TrekMate</span>?
-            You’re in the right place. Whether you're planning your first hike
-            or heading off-grid, our FAQs cover everything you need to know.
+      <section className="faq py-16 px-6 max-w-5xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-semibold">Any questions? We got you.</h2>
+          <Link to="/faqs">
+            <button className="cursor-pointer mt-4 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-4 py-2 font-medium transition" title="Read FAQs">
+              Faq
+            </button>
+          </Link>
+          <p className="mt-4 text-neutral-700 leading-relaxed">
+            Got questions about <span className="highlight">TrekMate</span>? Our FAQs cover everything you need to know before your trek.
           </p>
-          
-        </div>
-        <div className="faq-que-container">
-          <div>
-            <p>What is TrekMate all about?</p>
-            <span>+</span>
-          </div>
-
-          <div>
-            <p>Is TrekMate free to use?</p>
-            <span>+</span>
-          </div>
-          <div>
-            <p>How does the SOS feature work?</p>
-            <span>+</span>
-          </div>
-          <div>
-            <p>Is TrekMate safe for solo travelers?</p>
-            <span>+</span>
-          </div>
-
-          <div>
-            <p>Is TrekMate safe for solo travelers?</p>
-            <span>+</span>
-          </div>
-          
         </div>
       </section>
 
-      <section className="features">
-        <div className="features-text-container">
-          <h2>Why Choose TrekMate ?</h2>
-          <p>
-            TrekMate isn't just a trekking app—it's your ultimate adventure
-            companion, designed to make every step of your journey smarter,
-            safer, and more memorable. Whether you’re a first-time trekker or a
-            seasoned explorer, here’s why thousands choose TrekMate:
-          </p>
+      <section className="features py-16 px-6 max-w-7xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12">Why Choose TrekMate?</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
+            <h3 className="text-indigo-600 text-2xl font-bold mb-3">01 Budget-Friendly</h3>
+            <p className="text-neutral-700 leading-relaxed">Top-notch services at affordable prices based on your requirements.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
+            <h3 className="text-indigo-600 text-2xl font-bold mb-3">02 Flexible Itineraries</h3>
+            <p className="text-neutral-700 leading-relaxed">Customize your itinerary to match your interests, pace, and goals.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
+            <h3 className="text-indigo-600 text-2xl font-bold mb-3">03 Safety Comes First</h3>
+            <p className="text-neutral-700 leading-relaxed">SOS alerts, GPS tracking, fall detection, and offline access ensure safety everywhere.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
+            <h3 className="text-indigo-600 text-2xl font-bold mb-3">04 24/7 Support</h3>
+            <p className="text-neutral-700 leading-relaxed">Our support team is always available to help you before and during your trek.</p>
+          </div>
         </div>
-
-        <ul>
-          <li className="budget-friendly">
-            <h2>01</h2>
-            <b>
-              <p>Budget-Friendly</p>
-            </b>
-            <p>
-              We provide every package with top-notch services at affordable
-              prices based on your requirements.
-            </p>
-          </li>
-          <li className="flexible-itineraries">
-            <h2>02</h2>
-            <b>
-              <p>Flexible Itineraries</p>
-            </b>
-            <p>
-              No two trekkers are the same—so why should your trek be? With
-              TrekMate, you can customize your itinerary to match your
-              interests, pace, and goals.
-            </p>
-          </li>
-          <li className="safety-comes-first">
-            <h2>03</h2>
-            <b>
-              <p>Safety Comes First</p>
-            </b>
-            <p>
-              Stay protected with features like SOS alerts, GPS tracking, fall
-              detection, and offline access. Even in remote areas, TrekMate has
-              your back.
-            </p>
-          </li>
-          <li className="support">
-            <h2>04</h2>
-            <b>
-              <p>24/7 Support</p>
-            </b>
-            <p>
-              We’re with you every step of the way. Whether you’re planning your
-              trek or facing an issue on the trail, our support team is
-              available 24/7.
-            </p>
-          </li>
-        </ul>
       </section>
 
-      <section className="testimonials">
-        <div className="testimonials-container">
-          <h2>
-            What{" "}
-            <span className="highlight">
-              Our <br /> Travellers
-            </span>{" "}
-            Are Saying ?
+      <section className="testimonials py-16 px-6 bg-neutral-100 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-semibold">
+            What <span className="highlight">Our Travellers</span> Are Saying
           </h2>
-          <p>
-            At TrekMate, nothing matters more than the experiences of our users.
-            Read their stories and see why TrekMate is the trusted companion for
-            trekking enthusiasts across Nepal and beyond.
+          <p className="text-neutral-700 leading-relaxed mt-4">
+            Nothing matters more than user experiences. Discover why trekkers trust TrekMate for safe and memorable adventures.
           </p>
           <Link to="/review">
-            <button className="reviews-btn">View More</button>
+            <button className="cursor-pointer mt-4 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-6 py-3 font-semibold transition" title="Read more reviews">
+              View More
+            </button>
           </Link>
         </div>
 
-        <div className="testimonial">
-          <div className="review-box-container">
-            <img src={reviewImg1} />
-            <div className="review-container">
-              <div className="name-icon">
-                <h3>Sushma R., Pokhara</h3>
-                <span>
-                  <FontAwesomeIcon
-                    icon={faQuoteLeft}
-                    size="2x"
-                    flip="horizontal"
-                  />
-                </span>
+        <div className="flex justify-center">
+          <div className="flex flex-col md:flex-row items-start gap-6 bg-white p-6 rounded-xl shadow hover:shadow-lg transition cursor-pointer max-w-3xl">
+            <img src={reviewImg1} alt="User Review" className="w-20 h-20 rounded-full object-cover"/>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-neutral-900 text-lg md:text-xl">Sushma R., Pokhara</h3>
+                <FontAwesomeIcon icon={faQuoteLeft} size="2x" flip="horizontal" className="text-neutral-400"/>
               </div>
-              <p>
-                "TrekMate made my solo trek feel like a guided adventure. The AI
-                suggestions and weather updates were spot-on!"
+              <p className="text-neutral-700 leading-relaxed">
+                "TrekMate made my solo trek feel like a guided adventure. The AI suggestions and weather updates were spot-on!"
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="contact-container">
-        <h2>Let’s Stay Connected</h2>
-        <p>Have a question about trekking routes, trip planning, or using TrekMate features? Our team is here to help you navigate your journey—on and off the trail. Whether you're a trekker, guide, or just curious, feel free to reach out.
-Drop us a message anytime. We’d love to hear from you!</p>
-        <div className="contact-details">
+      <section className="contact-container py-16 px-6 max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-6">Let’s Stay Connected</h2>
+        <p className="text-neutral-700 leading-relaxed mb-6">
+          Have a question about trekking routes, trip planning, or TrekMate features? Our team is here to help you navigate your journey—on and off the trail.
+        </p>
+        <div className="flex flex-col md:flex-row justify-center gap-8 text-neutral-700 font-medium">
           <p>Email: trekmate@gmail.com</p>
           <p>Phone: 9812345678</p>
           <p>Address: Biratnagar, Baragachi</p>
         </div>
       </section>
-    </>
+
+    </div>
   );
 };
 
