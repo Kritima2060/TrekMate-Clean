@@ -5,7 +5,6 @@ const jwt= require("jsonwebtoken");
 const userSchema = new mongoose.Schema({
     fullName:{
         type:String,
-        minlength:[3],
     },
     email:{
         type: String,
@@ -13,9 +12,6 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type: String,
-    },
-    confirmPawword: {
-        type : String,
     },
   
 });
@@ -52,7 +48,7 @@ userSchema.methods.generateToken = async function(){
         return jwt.sign({
             userId : this._id.toString(),
             email: this.email,
-            name: this.user.fullName
+            name: this.fullName
             // isAdmin: this.isAdmin
         },
           process.env.JWT_SECRET_KEY,

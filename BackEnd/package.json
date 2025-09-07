@@ -18,8 +18,11 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
-    "nodemon": "^3.1.10",
+    "multer": "^2.0.2",
     "twilio": "^5.9.0",
     "zod": "^3.25.74"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

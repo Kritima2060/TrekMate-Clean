@@ -7,9 +7,42 @@ function BeginYourJourney() {
   const [trekPlaces, setTrekPlaces] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
   const apiKey = import.meta.env.VITE_REACT_APP_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
   const navigate = useNavigate();
+
+  // Calculate distance between two coordinates using Haversine formula
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c; // Distance in kilometers
+  };
+
+  // Sort places by distance and then by difficulty
+  const sortTrekPlaces = (places, userLat, userLng) => {
+    const difficultyWeight = { easy: 1, moderate: 2, hard: 3 };
+    
+    return places.map(place => ({
+      ...place,
+      distance: userLat && userLng ? 
+        calculateDistance(userLat, userLng, place.coordinates.lat, place.coordinates.lng) : 
+        0
+    })).sort((a, b) => {
+      // Primary sort: by distance (ascending)
+      const distanceDiff = a.distance - b.distance;
+      if (Math.abs(distanceDiff) > 1) { // If distance difference > 1km, sort by distance
+        return distanceDiff;
+      }
+      // Secondary sort: by difficulty (easy first, then moderate, then hard)
+      return difficultyWeight[a.difficulty] - difficultyWeight[b.difficulty];
+    });
+  };
 
   const fetchLocationName = async (lat, lng) => {
     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
@@ -20,7 +53,9 @@ function BeginYourJourney() {
   const handleLocationClick = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
-        const locationName = await fetchLocationName(position.coords.latitude, position.coords.longitude);
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        const locationName = await fetchLocationName(latitude, longitude);
         setSearchQuery(locationName);
       }, () => alert("Unable to retrieve your location."));
     } else {
@@ -34,7 +69,7 @@ function BeginYourJourney() {
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `
-      Generate a JSON array of 5-8 trekking places near ${location}. Each place should have:
+      Generate a JSON array of 8-12 trekking places near ${location}. Each place should have:
       {
         "name": "Place Name",
         "difficulty": "easy|moderate|hard",
@@ -45,34 +80,63 @@ function BeginYourJourney() {
         "duration" :"duration of trek on foot",
         "scenes": ["scene1(place)", "scene2", "scene3","scene4"],
         "thingsToKnowBeforeVisiting": "detailed advice and precautions",
-        "estimatedBudget": budget with currency,
+        "estimatedBudget": "budget with currency",
         "currency": "local currency",
         "availabilityOfRoadTransport": "yes|no",
         "needOfGuide": "yes|no",
         "coordinates": { "lat": latitude, "lng": longitude }
-      }`;
+      }
+      Make sure to include a good mix of easy, moderate, and hard difficulty trails with accurate coordinates.`;
+      
       const result = await model.generateContent(prompt);
       const response = await result.response;
       let cleanedText = (await response.text()).replace(/```json|```/g, "").trim();
       const places = JSON.parse(cleanedText);
-      if (Array.isArray(places)) setTrekPlaces(places);
-    } catch {
-      setTrekPlaces([{
-        name: "Sample Trek Near " + location,
-        difficulty: "easy",
-        color: "green",
-        district: "Morang",
-        duration: "6 hrs",
-        image: "www.facebook.com/image/1",
-        altitude: "500 - 800m",
-        scenes: ["Mountain views", "Local wildlife", "Forest trails"],
-        thingsToKnowBeforeVisiting: "Carry water and snacks.",
-        currency: "NPR/USD",
-        estimatedBudget: "100-200",
-        availabilityOfRoadTransport: "yes",
-        needOfGuide: "no",
-        coordinates: { lat: 0, lng: 0 }
-      }]);
+      
+      if (Array.isArray(places)) {
+        // Sort places by distance and difficulty
+        const sortedPlaces = sortTrekPlaces(places, userLocation?.lat, userLocation?.lng);
+        setTrekPlaces(sortedPlaces);
+      }
+    } catch (error) {
+      console.error("Error generating places:", error);
+      const samplePlaces = [
+        {
+          name: "Sample Easy Trek Near " + location,
+          difficulty: "easy",
+          color: "green",
+          district: "Morang",
+          duration: "4 hrs",
+          image: "www.facebook.com/image/1",
+          altitude: "300 - 500m",
+          scenes: ["River views", "Local wildlife", "Easy trails"],
+          thingsToKnowBeforeVisiting: "Carry water and snacks.",
+          currency: "NPR/USD",
+          estimatedBudget: "50-100",
+          availabilityOfRoadTransport: "yes",
+          needOfGuide: "no",
+          coordinates: { lat: userLocation?.lat || 0, lng: userLocation?.lng || 0 },
+          distance: 0
+        },
+        {
+          name: "Sample Moderate Trek Near " + location,
+          difficulty: "moderate",
+          color: "orange",
+          district: "Morang",
+          duration: "8 hrs",
+          image: "www.facebook.com/image/2",
+          altitude: "800 - 1200m",
+          scenes: ["Mountain views", "Forest trails", "Rocky paths"],
+          thingsToKnowBeforeVisiting: "Good fitness required. Carry proper gear.",
+          currency: "NPR/USD",
+          estimatedBudget: "150-300",
+          availabilityOfRoadTransport: "no",
+          needOfGuide: "yes",
+          coordinates: { lat: (userLocation?.lat || 0) + 0.01, lng: (userLocation?.lng || 0) + 0.01 },
+          distance: userLocation ? 1.5 : 0
+        }
+      ];
+      setTrekPlaces(samplePlaces);
     } finally {
       setIsLoading(false);
     }
@@ -85,62 +149,74 @@ function BeginYourJourney() {
 
   const colorMap = { green: "bg-green-400", orange: "bg-amber-400", red: "bg-rose-400" };
 
-
-
-const renderTrekPlaces = () => {
-  const navigate = useNavigate();
-
-  return trekPlaces.map((place, index) => (
-    <div
-      key={index}
-      id="eachTrekPlace"
-      className="flex flex-col justify-between items-stretch rounded-xl border border-gray-300 bg-white  min-w-[220px] max-w-xs w-full max-h-120 overflow-scroll gap-3 cursor-pointer"
-      onClick={() =>
-        navigate("/trekhome", {
-          state: {
-            name: place.name,
-            district: place.district,
-            duration: place.duration,
-            altitude: place.altitude,
-            estimatedBudget: place.estimatedBudget,
-            coordinates:place.coordinates,
-            difficulty:place.difficulty,
-            currency:place.currency,
-            image:place.image,
-            transport:place.availabilityOfRoadTransport,
-            guide:place.needOfGuide,
-            advice:place.thingsToKnowBeforeVisiting,
-            scenes:place.scenes,
-
-
-          },
-        })
-      }
-    >
-      <div className="flex items-center gap-2 mb-1">
-        <span
-          className={`w-3 h-3 rounded-full ${colorMap[place.color] || "bg-gray-400"}`}
-        ></span>
-        <span className="text-xs text-gray-600 capitalize">{place.difficulty}</span>
+  const renderTrekPlaces = () => {
+    return trekPlaces.map((place, index) => (
+      <div
+        key={index}
+        id="eachTrekPlace"
+        className="flex flex-col justify-between items-stretch rounded-xl border border-gray-300 bg-white min-w-[220px] max-w-xs w-full max-h-120 overflow-scroll gap-3 cursor-pointer hover:shadow-lg transition-shadow"
+        onClick={() =>
+          navigate("/trekhome", {
+            state: {
+              name: place.name,
+              district: place.district,
+              duration: place.duration,
+              altitude: place.altitude,
+              estimatedBudget: place.estimatedBudget,
+              coordinates: place.coordinates,
+              difficulty: place.difficulty,
+              currency: place.currency,
+              image: place.image,
+              transport: place.availabilityOfRoadTransport,
+              guide: place.needOfGuide,
+              advice: place.thingsToKnowBeforeVisiting,
+              scenes: place.scenes,
+              distance: place.distance
+            },
+          })
+        }
+      >
+        <div className="flex items-center justify-between gap-2 mb-1 p-2">
+          <div className="flex items-center gap-2">
+            <span
+              className={`w-3 h-3 rounded-full ${colorMap[place.color] || "bg-gray-400"}`}
+            ></span>
+            <span className="text-xs text-gray-600 capitalize">{place.difficulty}</span>
+          </div>
+          {place.distance > 0 && (
+            <span className="text-xs text-blue-600 font-medium">
+              {place.distance.toFixed(1)} km
+            </span>
+          )}
+        </div>
+        
+        <div className="w-full aspect-square bg-gray-50 flex items-center justify-center rounded-lg border border-gray-100 mb-1 mx-2">
+          <img src={place.image} alt={place.name} className="w-full h-full object-cover rounded-lg" />
+        </div>
+        
+        <div className="font-semibold text-xl text-gray-900 text-center mb-1 px-2">
+          {place.name}
+        </div>
+        
+        <div className="flex flex-col gap-0.5 text-xs text-gray-500 mb-1 px-2">
+          <span><span className="text-gray-700">Altitude:</span> {place.altitude}</span>
+          <span><span className="text-gray-700">Duration:</span> {place.duration}</span>
+          <span><span className="text-gray-700">Guide:</span> {place.needOfGuide}</span>
+          <span><span className="text-gray-700">Transport:</span> {place.availabilityOfRoadTransport}</span>
+        </div>
+        
+        <div className="text-xs text-gray-600 mb-2 px-2">
+          <span className="text-indigo-500">Scenes:</span> {place.scenes?.join(", ") || "N/A"}
+        </div>
+        
+        {index === 0 && place.distance > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-2 mx-2 mb-2">
+            <span className="text-xs text-green-700 font-medium">🎯 Closest to you!</span>
+          </div>
+        )}
       </div>
-      <div className="w-full aspect-square bg-gray-50 flex items-center justify-center rounded-lg border border-gray-100 mb-1">
-       <img srcSet={place.image} alt="" srcset="" />
-      </div>
-      <div className="font-semibold text-xl text-gray-900 text-center mb-1 ">
-        {place.name}
-      </div>
-      <div className="flex flex-col gap-0.5 text-xs text-gray-500 mb-1">
-        <span><span className="text-gray-700">Altitude:</span> {place.altitude}</span>
-        <span><span className="text-gray-700">Guide:</span> {place.needOfGuide}</span>
-        <span><span className="text-gray-700">Transport:</span> {place.availabilityOfRoadTransport}</span>
-      </div>
-      <div className="text-xs text-gray-600 mb-1">
-        <span className="text-indigo-500">Scenes:</span> {place.scenes?.join(", ") || "N/A"}
-      </div>
-    </div>
-  ));
-};
-
+    ));
+  };
 
   return (
     <div className="min-h-screen bg-neutral-50 p-4 flex flex-col items-center gap-8">
@@ -171,9 +247,33 @@ const renderTrekPlaces = () => {
         >
           {isLoading ? "⏳ Searching..." : "Search"}
         </button>
+        {userLocation && (
+          <div className="text-sm text-gray-600 text-center">
+            📍 Using your location for distance-based sorting
+          </div>
+        )}
       </form>
-      {isLoading && <div className="text-center text-neutral-600">Generating trekking places...</div>}
-      <div className="flex flex-wrap gap-6 justify-center w-full max-w-7xl">{renderTrekPlaces()}</div>
+      
+      {isLoading && (
+        <div className="text-center text-neutral-600">
+          <div className="animate-pulse">🏔️ Generating trekking places...</div>
+          <div className="text-sm mt-2">Finding trails sorted by distance and difficulty</div>
+        </div>
+      )}
+      
+      {trekPlaces.length > 0 && (
+        <div className="w-full max-w-7xl">
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">
+              Found {trekPlaces.length} trails • Sorted by distance & difficulty
+            </h3>
+            <p className="text-sm text-gray-600">Closest and easiest trails appear first</p>
+          </div>
+          <div className="flex flex-wrap gap-6 justify-center">
+            {renderTrekPlaces()}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -12,14 +12,28 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  //Handle errors
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+  // Clear specific field error when user starts typing
+  if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: "" 
+      }));
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
