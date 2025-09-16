@@ -11,6 +11,16 @@ function BeginYourJourney() {
   const apiKey = import.meta.env.VITE_REACT_APP_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
   const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    "Analyzing terrain...",
+    "Finding trails sorted by distance and difficulty",
+    "Calculating elevation profiles...",
+    "Checking weather conditions...",
+    "Finalizing recommendations...",
+  ];
 
   useEffect(() => {
     const checkAuth = () => {
@@ -35,7 +45,28 @@ function BeginYourJourney() {
     };
 
     checkAuth();
-  }, [navigate]);
+
+      if (!isLoading) {
+    setProgress(0);
+    setCurrentStep(0);
+    return;
+  }
+
+  const interval = setInterval(() => {
+    setProgress(prev => {
+      const newProgress = prev + Math.random() * 8 + 2;
+      
+      if (newProgress >= 100) return 100;
+
+      const stepIndex = Math.floor((newProgress / 100) * steps.length);
+      setCurrentStep(Math.min(stepIndex, steps.length - 1));
+
+      return newProgress;
+    });
+  }, 5000);
+
+  return () => clearInterval(interval);
+  }, [navigate,isLoading]);
 
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371; // Earth's radius in kilometers
@@ -290,14 +321,13 @@ function BeginYourJourney() {
                 {place.availabilityOfRoadTransport}
               </span>
             </div>
-          <div className="bg-slate-50 w-full rounded-b-xl flex justify-between">
-            <div className="text-xs text-gray-600 mb-2 px-2">
-              <span className="font-semibold">Scenes:</span>{" "}
-              {place.scenes?.join(", ") || "N/A"}
+            <div className="bg-slate-50 w-full rounded-b-xl flex justify-between">
+              <div className="text-xs text-gray-600 mb-2 px-2">
+                <span className="font-semibold">Scenes:</span>{" "}
+                {place.scenes?.join(", ") || "N/A"}
+              </div>
             </div>
           </div>
-          </div>
-
 
           {index === 0 && place.distance > 0 && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-2 mx-2 mb-2">
@@ -318,7 +348,7 @@ function BeginYourJourney() {
         onSubmit={handleSearch}
       >
         <h2 className="text-2xl font-semibold text-center text-neutral-900">
-         Find Treks <span>Nearby</span>
+          Find Treks <span>Nearby</span>
         </h2>
         <div className="flex gap-3">
           <input
@@ -356,12 +386,25 @@ function BeginYourJourney() {
 
       {isLoading && (
         <div className="text-center text-neutral-600">
-          <div className="animate-pulse text-3xl font-bold">
-            {" "}
+          <div className="text-3xl font-bold mb-4">
             Generating trekking places...
           </div>
-          <div className="text-sm mt-2">
-            Finding trails sorted by distance and difficulty
+
+          <div className="max-w-md mx-auto mb-6">
+            <div className="w-full bg-neutral-200 h-1 mb-4 overflow-hidden rounded-full">
+              <div
+                className="h-full bg-neutral-900 transition-all duration-200 ease-out rounded-full"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            <div className="text-xs text-neutral-400 uppercase tracking-[0.2em] mb-4">
+              {Math.round(progress)}% Complete
+            </div>
+          </div>
+
+          <div className="text-sm text-neutral-500 min-h-[1.25rem]">
+            {steps[currentStep]}
           </div>
         </div>
       )}

@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
+  const apiKey = import.meta.env.VITE_REACT_APP_OPENWEATHER_API_KEY;
+const api = {
+  key: apiKey,
+  base: "https://api.openweathermap.org/data/2.5/",
+};
 
 export default function TrekHome() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showHotels, setShowHotels] = useState(false);
+  const [showWeather, setShowWeather] = useState(false);
   const [trekData, setTrekData] = useState(null);
+  const [weather, setWeather] = useState(null);
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [weatherError, setWeatherError] = useState("");
 
   useEffect(() => {
     const currentState = history.state?.usr;
@@ -11,6 +20,56 @@ export default function TrekHome() {
       setTrekData(currentState);
     }
   }, []);
+
+  const fetchWeather = async () => {
+    if (!trekData?.district) {
+      setWeatherError("Location information not available");
+      return;
+    }
+
+    setWeatherLoading(true);
+    setWeatherError("");
+    setWeather(null);
+
+    const searchOptions = [
+      trekData.district,
+      trekData.district.split('/')[0].trim(),
+      trekData.district.split('/')[1]?.trim(),
+      trekData.district.split(' ')[0],
+      `${trekData.district}, Nepal`,
+      `${trekData.district.split('/')[0].trim()}, Nepal`,
+      `${trekData.district.split(' ')[0]}, Nepal`
+    ].filter(Boolean);
+
+    for (const location of searchOptions) {
+      try {
+        const response = await fetch(
+          `${api.base}weather?q=${location}&appid=${api.key}&units=metric`
+        );
+        const result = await response.json();
+
+        if (response.ok) {
+          setWeather(result);
+          setWeatherLoading(false);
+          return;
+        }
+      } catch (err) {
+        continue;
+      }
+    }
+
+    setWeatherError("Weather data not available for this region");
+    setWeatherLoading(false);
+  };
+
+  const handleWeatherToggle = () => {
+    const newShowWeather = !showWeather;
+    setShowWeather(newShowWeather);
+    
+    if (newShowWeather && !weather && !weatherLoading) {
+      fetchWeather();
+    }
+  };
 
   const nextPhoto = () =>
     setGalleryIndex((i) => (i + 1) % (gallery?.length || 1));
@@ -42,7 +101,6 @@ export default function TrekHome() {
 
   return (
     <main className="min-h-screen p-32 bg-white">
-      {/* Hero */}
       <section className="px-8 pb-16  text-center">
         <h1 className="text-4xl md:text-6xl font-extralight text-neutral-900 mb-6 tracking-tight leading-none">
           {trekData?.name}
@@ -52,7 +110,6 @@ export default function TrekHome() {
         </p>
       </section>
 
-      {/* Gallery */}
       <section className="px-8 mb-16">
         <div className="max-w-5xl mx-auto">
           <div className="relative group mb-12">
@@ -99,7 +156,6 @@ export default function TrekHome() {
         </div>
       </section>
 
-      {/* Stats */}
       <section className="px-8 mb-32">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -125,11 +181,9 @@ export default function TrekHome() {
         </div>
       </section>
 
-      {/* Details */}
       <section className="px-8 mb-32">
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-24">
           
-          {/* Things to Know */}
           <div>
             <h2 className="text-xs text-neutral-400 uppercase tracking-[0.2em] mb-12">
               Things to Know
@@ -158,7 +212,6 @@ export default function TrekHome() {
             </div>
           </div>
 
-          {/* Places & Hotels */}
           <div>
             <h2 className="text-xs text-neutral-400 uppercase tracking-[0.2em] mb-12">
               Places to View
@@ -172,15 +225,24 @@ export default function TrekHome() {
               ))}
             </div>
 
-            <button
-              className="w-full h-14 hover:cursor-pointer bg-neutral-900 text-white text-sm uppercase tracking-[0.1em] hover:bg-neutral-800 transition-colors duration-300 mb-8"
-              onClick={() => setShowHotels((v) => !v)}
-            >
-              {showHotels ? "Hide Hotels" : "Find Hotels"}
-            </button>
+            <div className="space-y-2">
+              <button
+                className="w-full h-14 hover:cursor-pointer bg-neutral-900 text-white text-sm uppercase tracking-[0.1em] hover:bg-neutral-800 transition-colors duration-300"
+                onClick={() => setShowHotels((v) => !v)}
+              >
+                {showHotels ? "Hide Hotels" : "Find Hotels"}
+              </button>
+
+              <button
+                className="w-full h-14 hover:cursor-pointer border border-neutral-900 text-neutral-900 text-sm uppercase tracking-[0.1em] hover:bg-neutral-50 transition-colors duration-300"
+                onClick={handleWeatherToggle}
+              >
+                {showWeather ? "Hide Weather" : "Check Weather"}
+              </button>
+            </div>
 
             {showHotels && (
-              <div className="space-y-1 animate-in fade-in duration-500">
+              <div className="space-y-1 animate-in fade-in duration-500 mt-8">
                 {hotels.map((hotel, idx) => (
                   <div
                     key={idx}
@@ -195,6 +257,86 @@ export default function TrekHome() {
                     <p className="text-neutral-900 font-light">{hotel.price}</p>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {showWeather && (
+              <div className="mt-8 animate-in fade-in duration-500">
+                {weatherLoading && (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="w-1 h-8 bg-neutral-900 animate-pulse"></div>
+                  </div>
+                )}
+
+                {weatherError && (
+                  <div className="border border-neutral-200 bg-neutral-50 px-6 py-8 text-center">
+                    <p className="text-sm text-neutral-600 font-light">
+                      {weatherError}
+                    </p>
+                  </div>
+                )}
+
+                {weather && weather.main && (
+                  <div className="border border-neutral-200 bg-neutral-50 px-6 py-8">
+                    <div className="text-center mb-8">
+                      <h3 className="text-xs text-neutral-400 uppercase tracking-[0.2em] mb-4">
+                        Current Weather
+                      </h3>
+                      <div className="text-3xl font-extralight text-neutral-900 mb-2">
+                        {Math.round(weather.main.temp)}°C
+                      </div>
+                      <p className="text-sm text-neutral-600 capitalize font-light">
+                        {weather.weather[0].description}
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-6 text-center">
+                      <div>
+                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-2">
+                          Feels like
+                        </p>
+                        <p className="text-lg font-light text-neutral-900">
+                          {Math.round(weather.main.feels_like)}°C
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-2">
+                          Humidity
+                        </p>
+                        <p className="text-lg font-light text-neutral-900">
+                          {weather.main.humidity}%
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-2">
+                          Wind
+                        </p>
+                        <p className="text-lg font-light text-neutral-900">
+                          {weather.wind ? `${weather.wind.speed} m/s` : "N/A"}
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <p className="text-xs text-neutral-400 uppercase tracking-[0.15em] mb-2">
+                          Pressure
+                        </p>
+                        <p className="text-lg font-light text-neutral-900">
+                          {weather.main.pressure} hPa
+                        </p>
+                      </div>
+                    </div>
+
+                    {weather.main.temp_min !== weather.main.temp_max && (
+                      <div className="mt-6 pt-6 border-t border-neutral-200 text-center">
+                        <p className="text-sm text-neutral-600 font-light">
+                          Low {Math.round(weather.main.temp_min)}°C • High {Math.round(weather.main.temp_max)}°C
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

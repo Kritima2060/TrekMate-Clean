@@ -10,5 +10,6 @@ export default defineConfig({
   plugins: [react(),tailwindcss()],
     define: {
     "process.env.VITE_REACT_APP_GEMINI_API_KEY": JSON.stringify(process.env.VITE_REACT_APP_GEMINI_API_KEY),
+    "process.env.VITE_REACT_APP_OPENWEATHER_API_KEY": JSON.stringify(process.env.VITE_REACT_APP_OPENWEATHER_API_KEY),
   },
 })
