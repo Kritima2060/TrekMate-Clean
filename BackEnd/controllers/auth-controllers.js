@@ -38,7 +38,6 @@ const registration = async (req, res, next) => {
       },
     });
 
-    localStorage.setItem("user",res.status(201).json.user)
   } catch (error) {
     next(error);
   }

@@ -42,7 +42,6 @@ function BeginYourJourney() {
     return R * c; // Distance in kilometers
   };
 
-
   const sortTrekPlaces = (places, userLat, userLng) => {
     const difficultyWeight = { easy: 1, moderate: 2, hard: 3 };
     
