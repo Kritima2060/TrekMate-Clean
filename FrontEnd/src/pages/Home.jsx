@@ -12,203 +12,237 @@ import ThirdDes from "../assets/ebc.svg";
 import fourthDes from "../assets/des4.svg";
 import why_trekmate_img from "../assets/why-trekmate-img.svg";
 import reviewImg1 from "../assets/reviewAvatar1.svg";
-import sos from "../assets/sos.svg";
-import chatbot from "../assets/chatbot.svg";
+
 import weatherimage from "../assets/weather-alerts.svg";
 
 const HomePage = () => {
   return (
-    <div className="bg-neutral-50 text-neutral-800 font-sans">
-      
-      <section className="hero flex flex-col md:flex-row items-center gap-12 py-16 px-6 max-w-7xl mb-32 mx-auto">
-        <div className="md:w-1/2 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-snug">
-            Let <span className="highlight">TrekMate</span> Guide You —<br />
-            One Smart Step <span className="highlight">Closer to Nature</span>.
-          </h1>
-          <p className="text-lg md:text-xl leading-relaxed text-neutral-700">
-            <span className="highlight">TrekMate</span> simplifies trekking with AI assistance, real-time weather alerts, homestay bookings, reviews, and SOS features.
-          </p>
-          <Link to="/beginyourjourney">
-            <button className="cursor-pointer h-12 px-6 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md text-lg font-semibold transition" title="Start exploring trekking destinations">
-              Begin Your Journey
-            </button>
-          </Link>
-        </div>
+    <div className="bg-white text-slate-900 font-light">
 
-        <div className="md:w-1/2 relative flex justify-center items-center gap-4">
-          <div className="relative z-10">
-            <img src={templeImage} alt="templeImage" className="rounded-xl shadow-lg w-full md:w-80" />
+      <section className="min-h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8">
+            <h1 className="text-5xl md:text-7xl font-extralight leading-tight tracking-tight">
+              Trek
+              <br />
+              <span className="font-light bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+                Smarter
+              </span>
+            </h1>
+            <p className="text-xl text-slate-600 leading-relaxed max-w-md">
+              AI-powered trekking companion with weather alerts, safety
+              features, and curated experiences.
+            </p>
+            <Link to="/beginyourjourney">
+              <button className="group relative overflow-hidden bg-slate-900 rounded-xl text-white px-8 py-4 text-lg font-light tracking-wide hover:bg-slate-800 transition-all duration-300 cursor-pointer">
+                <span className="relative z-10">Begin Journey</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-slate-700 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+              </button>
+            </Link>
           </div>
-          <div className="absolute right-0 top-12 flex flex-col gap-2">
-            <img src={banner} alt="banner" className="rounded-xl w-48 shadow-md" />
-            <img src={templeImage3} alt="templeImage3" className="rounded-xl w-48 shadow-md" />
-          </div>
-        </div>
-      </section>
 
-      <section
-  id="always-on-left"
-  className="fixed bottom-6 left-6 flex flex-col gap-4 z-50"
->
-  <Link
-    to="/error"
-    className="cursor-pointer hover:scale-105 transition"
-    title="Chatbot Assistance"
-  >
-    <img src={chatbot} alt="Chatbot" className="w-12 h-12 md:w-12 md:h-12" />
-  </Link>
-  <Link
-    to="/emergencyalert"
-    className="cursor-pointer hover:scale-105 transition"
-    title="Emergency SOS"
-  >
-    <img src={sos} alt="SOS" className="w-12 h-12 md:w-12 md:h-12" />
-  </Link>
-  <Link
-    to="/error"
-    className="cursor-pointer hover:scale-105 transition"
-    title="Weather Alerts"
-  >
-    <img
-      src={weatherimage}
-      alt="Weather Alert"
-      className="w-12 h-12 md:w-12 md:h-12"
-    />
-  </Link>
-</section>
-
-
-      <section className="destinations py-16 px-6 max-w-7xl mb-32 mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-semibold">Top Destinations</h2>
-          <Link to="/topdestination">
-            <button className="cursor-pointer bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-4 py-2 font-medium transition" title="See all trekking trips">
-              See All Trips
-            </button>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
-            <img src={abcImage} alt="Annapurna Base Camp" className="w-full h-80 object-cover"/>
-            <span className="block p-2 text-center font-medium bg-white">{'Annapurna Base Camp Trek'}</span>
-          </div>
-          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
-            <img src={secDes} alt="Everest Base Camp" className="w-full h-80 object-cover"/>
-            <span className="block p-2 text-center font-medium bg-white">{'Everest Base Camp'}</span>
-          </div>
-          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
-            <img src={ThirdDes} alt="Langtang Region" className="w-full h-80 object-cover"/>
-            <span className="block p-2 text-center font-medium bg-white">{'Langtang Region Trekking'}</span>
-          </div>
-          <div className="card cursor-pointer hover:shadow-lg transition rounded-xl overflow-hidden">
-            <img src={fourthDes} alt="Manaslu Region" className="w-full h-80 object-cover"/>
-            <span className="block p-2 text-center font-medium bg-white">{'Manaslu Region Trekking'}</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="why-trekmate py-16 px-6 bg-neutral-100 flex flex-col md:flex-row items-center gap-12 max-w-7xl mx-auto">
-        <div className="md:w-1/2">
-          <img src={why_trekmate_img} alt="Why TrekMate" className="rounded-xl  w-full" />
-        </div>
-        <div className="md:w-1/2 space-y-6">
-          <h2 className="text-3xl md:text-4xl font-semibold">
-            Why <span className="highlight">TrekMate</span>
-          </h2>
-          <p className="text-neutral-700 leading-relaxed font-medium">
-            <strong>TrekMate</strong> simplifies trekking by integrating weather alerts, accommodation details, and safety features into one intuitive platform.
-          </p>
-          <p className="text-neutral-700 leading-relaxed">
-            Plan better. Trek smarter. Stay safe. With <span className="highlight">TrekMate</span>.
-          </p>
-          <Link to="/aboutus">
-            <button className="cursor-pointer h-12 px-6 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md text-lg font-semibold transition" title="Learn more about TrekMate">
-              Learn More
-            </button>
-          </Link>
-        </div>
-      </section>
-
-      <section className="faq py-16 px-6 max-w-5xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-semibold">Any questions? We got you.</h2>
-          <Link to="/faqs">
-            <button className="cursor-pointer mt-4 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-4 py-2 font-medium transition" title="Read FAQs">
-              Faq
-            </button>
-          </Link>
-          <p className="mt-4 text-neutral-700 leading-relaxed">
-            Got questions about <span className="highlight">TrekMate</span>? Our FAQs cover everything you need to know before your trek.
-          </p>
-        </div>
-      </section>
-
-      <section className="features py-16 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12">Why Choose TrekMate?</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
-            <h3 className="text-indigo-600 text-2xl font-bold mb-3">01 Budget-Friendly</h3>
-            <p className="text-neutral-700 leading-relaxed">Top-notch services at affordable prices based on your requirements.</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
-            <h3 className="text-indigo-600 text-2xl font-bold mb-3">02 Flexible Itineraries</h3>
-            <p className="text-neutral-700 leading-relaxed">Customize your itinerary to match your interests, pace, and goals.</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
-            <h3 className="text-indigo-600 text-2xl font-bold mb-3">03 Safety Comes First</h3>
-            <p className="text-neutral-700 leading-relaxed">SOS alerts, GPS tracking, fall detection, and offline access ensure safety everywhere.</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg cursor-pointer transition">
-            <h3 className="text-indigo-600 text-2xl font-bold mb-3">04 24/7 Support</h3>
-            <p className="text-neutral-700 leading-relaxed">Our support team is always available to help you before and during your trek.</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="testimonials py-16 px-6 bg-neutral-100 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-semibold">
-            What <span className="highlight">Our Travellers</span> Are Saying
-          </h2>
-          <p className="text-neutral-700 leading-relaxed mt-4">
-            Nothing matters more than user experiences. Discover why trekkers trust TrekMate for safe and memorable adventures.
-          </p>
-          <Link to="/review">
-            <button className="cursor-pointer mt-4 bg-[#4A6C84] text-amber-50 hover:text-black hover:bg-amber-50 hover:border-2 hover:border-[#4A6C84] rounded-md px-6 py-3 font-semibold transition" title="Read more reviews">
-              View More
-            </button>
-          </Link>
-        </div>
-
-        <div className="flex justify-center">
-          <div className="flex flex-col md:flex-row items-start gap-6 bg-white p-6 rounded-xl shadow hover:shadow-lg transition cursor-pointer max-w-3xl">
-            <img src={reviewImg1} alt="User Review" className="w-20 h-20 rounded-full object-cover"/>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-neutral-900 text-lg md:text-xl">Sushma R., Pokhara</h3>
-                <FontAwesomeIcon icon={faQuoteLeft} size="2x" flip="horizontal" className="text-neutral-400"/>
-              </div>
-              <p className="text-neutral-700 leading-relaxed">
-                "TrekMate made my solo trek feel like a guided adventure. The AI suggestions and weather updates were spot-on!"
-              </p>
+          <div className="relative">
+            <div className="aspect-[3/3] overflow-hidden">
+              {/* <img
+                src={templeImage}
+                alt="Mountain landscape"
+                className="w-full  h-full object-cover absolute hover:red transition-all duration-700"
+              /> */}
+              <img
+                src={templeImage3}
+                alt="Mountain landscape"
+                className="w-full left-1 h-full absolute object-cover "
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="contact-container py-16 px-6 max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-6">Let’s Stay Connected</h2>
-        <p className="text-neutral-700 leading-relaxed mb-6">
-          Have a question about trekking routes, trip planning, or TrekMate features? Our team is here to help you navigate your journey—on and off the trail.
-        </p>
-        <div className="flex flex-col md:flex-row justify-center gap-8 text-neutral-700 font-medium">
-          <p>Email: trekmate@gmail.com</p>
-          <p>Phone: 9812345678</p>
-          <p>Address: Biratnagar, Baragachi</p>
+
+      <div className="fixed bottom-8 right-8 flex flex-col gap-3 z-50">
+        <Link
+          to="/weather"
+          className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
+          title="Weather Alerts"
+        >
+          <img
+            src={weatherimage}
+            alt="Weather Alert"
+            className="w-12 h-12 md:w-12 md:h-12"
+          />
+        </Link>
+        <button
+          className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
+          title="AI Assistant"
+        >
+          <svg
+            className="w-5 h-5 text-slate-700"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+        <button
+          className="w-12 h-12 bg-red-500 shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 cursor-pointer"
+          title="Emergency SOS"
+        >
+          <svg
+            className="w-5 h-5 text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+
+      <section className="py-32 px-6 max-w-6xl mx-auto">
+        <div className="flex justify-between items-end mb-16">
+          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight">
+            Destinations
+          </h2>
+          <button className="text-slate-600 hover:text-slate-900 font-light tracking-wide border-b border-transparent hover:border-slate-300 transition-all cursor-pointer">
+            View All →
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { img: abcImage, title: "Annapurna Base Camp" },
+            { img: secDes, title: "Everest Base Camp" },
+            { img: ThirdDes, title: "Langtang Valley" },
+            { img: fourthDes, title: "Manaslu Circuit" },
+          ].map((destination, index) => (
+            <div key={index} className="group cursor-pointer">
+              <div className="aspect-[4/5] overflow-hidden mb-4">
+                <img
+                  src={destination.img}
+                  alt={destination.title}
+                  className="w-full h-full object-cover  group-hover:scale-105 transition-all duration-700"
+                />
+              </div>
+              <h3 className="font-light text-lg tracking-wide text-slate-700 group-hover:text-slate-900 transition-colors">
+                {destination.title}
+              </h3>
+            </div>
+          ))}
         </div>
       </section>
 
+      <section className="py-32 px-6 bg-slate-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight text-center mb-20">
+            Why TrekMate
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {[
+              {
+                number: "01",
+                title: "AI Powered",
+                desc: "Intelligent route suggestions and personalized recommendations.",
+              },
+              {
+                number: "02",
+                title: "Safety First",
+                desc: "Real-time alerts, SOS features, and emergency assistance.",
+              },
+              {
+                number: "03",
+                title: "Weather Smart",
+                desc: "Advanced weather monitoring and predictive alerts.",
+              },
+              {
+                number: "04",
+                title: "Always Connected",
+                desc: "24/7 support and community-driven insights.",
+              },
+            ].map((feature, index) => (
+              <div key={index} className="space-y-4">
+                <div className="text-6xl font-extralight text-slate-200">
+                  {feature.number}
+                </div>
+                <h3 className="text-xl font-light tracking-wide">
+                  {feature.title}
+                </h3>
+                <p className="text-slate-600 leading-relaxed text-sm">
+                  {feature.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial Section */}
+      <section className="py-32 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight mb-8">
+            Traveller Stories
+          </h2>
+          <button className="text-slate-600 hover:text-slate-900 font-light tracking-wide border-b border-transparent hover:border-slate-300 transition-all cursor-pointer">
+            Read More →
+          </button>
+        </div>
+
+        <div className="bg-white p-12 border border-slate-100 hover:shadow-2xl transition-all duration-500">
+          <div className="flex flex-col md:flex-row items-start gap-8">
+            <img
+              src={reviewImg1}
+              alt="Reviewer"
+              className="w-16 h-16 rounded-full object-cover grayscale"
+            />
+            <div className="flex-1">
+              <blockquote className="text-xl font-light leading-relaxed text-slate-700 mb-6">
+                "TrekMate transformed my solo adventure into a guided
+                experience. The AI insights and safety features gave me
+                confidence to explore beyond my comfort zone."
+              </blockquote>
+              <cite className="text-sm font-light text-slate-500 tracking-wide">
+                SUSHMA R., POKHARA
+              </cite>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-32 px-6 bg-slate-900 text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-extralight tracking-tight mb-12">
+            Let's Connect
+          </h2>
+          <p className="text-xl font-light text-slate-300 leading-relaxed mb-16 max-w-2xl mx-auto">
+            Ready to embark on your next adventure? Get in touch and let
+            TrekMate guide your journey.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8 text-sm font-light text-slate-400 tracking-wide">
+            <div>
+              <div className="mb-2">EMAIL</div>
+              <div className="text-white">trekmate@gmail.com</div>
+            </div>
+            <div>
+              <div className="mb-2">PHONE</div>
+              <div className="text-white">+977 981-234-5678</div>
+            </div>
+            <div>
+              <div className="mb-2">LOCATION</div>
+              <div className="text-white">Biratnagar, Nepal</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
