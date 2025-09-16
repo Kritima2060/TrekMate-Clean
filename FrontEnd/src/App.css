@@ -455,6 +455,7 @@ position: relative;
 /* Register page */
 
 
+
 .register-container {
   display: flex;
   justify-content: center;
@@ -482,6 +483,7 @@ position: relative;
   flex-direction: column;
 }
 
+
 .register-form label {
   text-align: left;
   font-weight: 500;
@@ -504,6 +506,28 @@ position: relative;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+  text-align: left;
+}
+
+.register-form input.error {
+  border-color: #e74c3c;
+  border-width: 2px;
+}
+
+.register-form input.error:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 .login-text {
   margin-top: 16px;

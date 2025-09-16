@@ -50,13 +50,13 @@ const login = async (req, res) => {
 
     const userExist = await User.findOne({ email });
     if (!userExist) {
-      return res.status(401).json({ msg: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
 
     const isMatch = await userExist.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ msg: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
     
     res.status(200).json({

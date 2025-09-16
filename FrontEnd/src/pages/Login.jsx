@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../App.css";
+import { useAuth } from "../store/auth";
 
 const URL = "http://localhost:5555/api/auth/login";
 
@@ -10,7 +11,10 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
+
+  const { storeTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -37,8 +41,11 @@ const Login = () => {
         console.log("After login:", responseData);
 
         // Save user info + token
-        localStorage.setItem("user", JSON.stringify(responseData.user));
-        localStorage.setItem("token", responseData.token);
+        storeTokenInLS(responseData.token);
+
+        // localStorage.setItem("user", JSON.stringify(responseData.user));
+        // // localStorage.setItem("token", responseData.token);
+        // localStorage.setItem("loggedIn", true);
 
         // Clear form
         setFormData({ email: "", password: "" });

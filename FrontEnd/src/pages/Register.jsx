@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../App.css";
+import { useAuth } from "../store/auth";
 
 const URL = "http://localhost:5555/api/auth/register";
 
@@ -16,7 +17,10 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+
+
   const navigate = useNavigate();
+   const { storeTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,10 +43,10 @@ const Register = () => {
     e.preventDefault();
 
     // client-side validation
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+    //if (formData.password !== formData.confirmPassword) {
+      //alert("Passwords do not match!");
+     // return;
+    //}
 
     try {
       const response = await fetch(URL, {
@@ -53,10 +57,15 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
 
+      
+      const responseData = await response.json();
       if (response.ok) {
-        const responseData = await response.json();
         console.log("Registration successful:", responseData);
 
+        //Save user token
+        storeTokenInLS(responseData.token);
+        // localStorage.setItem("token", responseData.token);
+        
         // reset form
         setFormData({
           fullName: "",
@@ -68,7 +77,8 @@ const Register = () => {
         // redirect to login
         navigate("/login");
       } else {
-        console.error("Server responded with error:", response.status);
+        console.error("Server responded with error:", responseData.extraDetails);
+        // setError(responseData.extraDetails);
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -76,9 +86,11 @@ const Register = () => {
   };
 
   return (
+    
     <div className="register-container">
       <div className="register-box">
         <h2>Create Account</h2>
+        
         <form className="register-form" onSubmit={handleSubmit}>
           <label>Full Name</label>
           <input
