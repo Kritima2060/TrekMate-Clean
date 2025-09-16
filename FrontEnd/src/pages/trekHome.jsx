@@ -1,196 +1,184 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
-const trekData = {
-    name: "Everest Base Camp",
-    duration: "12 days",
-    altitude: "5,364 m",
-    currency: "Nepalese Rupee (NPR)",
-    district: "Solukhumbu",
-    estimatedBudget: "$1200 - $2000",
-    thingsToKnow: [
-        "Weather can be unpredictable; pack accordingly.",
-        "Permits required: TIMS & Sagarmatha National Park.",
-        "Altitude sickness is a risk; acclimatize properly.",
-        "Limited ATM access; carry enough cash.",
-    ],
-    placesToView: [
-        "Namche Bazaar",
-        "Tengboche Monastery",
-        "Kala Patthar",
-        "Lukla",
-        "Sagarmatha National Park",
-    ],
-    gallery: [
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-        "https://images.unsplash.com/photo-1464983953574-0892a716854b",
-        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429",
-        "https://images.unsplash.com/photo-1517821099601-1a7c1e1e8a5e",
-    ],
-    hotels: [
-        { name: "Hotel Everest View", location: "Syangboche", price: "$200/night" },
-        { name: "Namche Hotel", location: "Namche Bazaar", price: "$50/night" },
-        { name: "Yeti Mountain Home", location: "Lukla", price: "$80/night" },
-    ],
-};
+import React, { useState, useEffect } from "react";
 
 export default function TrekHome() {
-    
     const [galleryIndex, setGalleryIndex] = useState(0);
     const [showHotels, setShowHotels] = useState(false);
-    const location = useLocation();
-    const trekData = location.state;
-    console.log(trekData)
-    
+    const [trekData, setTrekData] = useState(null);
+
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) {
-        // Redirect to login if not logged in
-        window.location.href = "/login";
+        const currentState = history.state?.usr;
+        if (currentState) {
+            setTrekData(currentState);
         }
-        if (!trekData) {
-      // redirect if no data (maybe user opened page directly)
-      console.log("notrekdata")
-      window.location.href = "/";
+    }, []);
+
+    const nextPhoto = () => setGalleryIndex((i) => (i + 1) % (gallery?.length || 1));
+    const prevPhoto = () => setGalleryIndex((i) => (i === 0 ? (gallery?.length || 1) - 1 : i - 1));
+
+    const gallery = [
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&h=600&fit=crop",
+    ];
+
+    const hotels = [
+        { name: "Hotel Everest View", location: "Syangboche", price: "$200/night" },
+        { name: "Namche Hotel", location: "Namche Bazaar", price: "$50/night" },
+        { name: "Yeti Mountain Home", location: "Lukla", price: "$80/night" }
+    ];
+
+    if (!trekData) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-2xl font-bold text-slate-900 mb-2">Loading...</div>
+                    <div className="text-slate-600">Please wait while we load the trek details</div>
+                </div>
+            </div>
+        );
     }
-  }, [trekData]);
-
-
-    // const nextPhoto = () =>
-    //     setGalleryIndex((i) => (i + 1) % trekData.gallery.length);
-    // const prevPhoto = () =>
-    //     setGalleryIndex((i) => (i === 0 ? trekData.gallery.length - 1 : i - 1));
-    console.log(trekData?.coordinates.lat)
-    console.log(trekData?.coordinates.lng)
+    
     return (
-        <main className="min-h-screen w-full bg-gray-50 flex flex-col md:flex-row items-start justify-center px-6 py-12 gap-10">
-            {/* Left Section */}
-            <section className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8 space-y-8 border border-gray-200">
-                {/* Header */}
-                <header className="text-center space-y-2">
-                    <h1 className="text-3xl font-bold text-gray-800 tracking-tight">{trekData?.name}</h1>
-                    <span className="text-lg text-gray-600 font-semibold">{trekData?.district}</span>
+        <main className="min-h-screen w-full bg-slate-50 flex flex-col lg:flex-row items-start justify-center px-4 py-8 gap-8">
+            <section className="w-full max-w-2xl bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
+                <header className="text-center mb-8">
+                    <h1 className="text-4xl font-bold text-slate-900 mb-2">{trekData?.name}</h1>
+                    <span className="text-xl text-slate-600 font-medium">{trekData?.district}</span>
                 </header>
 
-                {/* Gallery */}
-                <div className="flex flex-col items-center gap-3">
-                    <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-gray-200 shadow">
+                <div className="mb-8">
+                    <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-slate-200 shadow-sm">
                         <img 
-                        src={trekData?.image}
-                            // src={trekData.gallery[galleryIndex]}
-                            // alt={`Gallery ${galleryIndex + 1}`}
-                            className="object-cover w-full h-full transition duration-300 scale-105 hover:scale-110"
+                            src={gallery[galleryIndex]}
+                            alt={`Gallery ${galleryIndex + 1}`}
+                            className="object-cover w-full h-full"
                         />
-                        <button
-                            // onClick={prevPhoto}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 text-gray-700 rounded-full p-2 border shadow hover:bg-gray-100 transition"
-                            aria-label="Previous photo"
-                        >
-                            &#8592;
-                        </button>
-                        <button
-                            // onClick={nextPhoto}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 text-gray-700 rounded-full p-2 border shadow hover:bg-gray-100 transition"
-                            aria-label="Next photo"
-                        >
-                            
-                        </button>
-                        <span className="absolute bottom-3 right-3 bg-gray-100/90 text-md px-3 py-1 rounded-full shadow text-gray-700 font-semibold">
-                            {/* {galleryIndex + 1}/{trekData.gallery.length} */}
+                        {gallery.length > 1 && (
+                            <>
+                                <button
+                                    onClick={prevPhoto}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 text-slate-700 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white"
+                                >
+                                    ←
+                                </button>
+                                <button
+                                    onClick={nextPhoto}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 text-slate-700 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-white"
+                                >
+                                    →
+                                </button>
+                            </>
+                        )}
+                    </div>
+                    {gallery.length > 1 && (
+                        <div className="flex justify-center gap-2 mt-4">
+                            {gallery.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setGalleryIndex(idx)}
+                                    className={`w-3 h-3 rounded-full transition ${
+                                        idx === galleryIndex ? 'bg-slate-800' : 'bg-slate-300 hover:bg-slate-400'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg px-4 py-3 border border-blue-100">
+                        <span className="text-xs font-medium text-blue-700 block mb-1">Duration</span>
+                        <span className="text-slate-900 font-semibold text-sm">{trekData?.duration}</span>
+                    </div>
+                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-lg px-4 py-3 border border-emerald-100">
+                        <span className="text-xs font-medium text-emerald-700 block mb-1">Difficulty</span>
+                        <span className="text-slate-900 font-semibold text-sm capitalize">{trekData?.difficulty}</span>
+                    </div>
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg px-4 py-3 border border-amber-100">
+                        <span className="text-xs font-medium text-amber-700 block mb-1">Guide</span>
+                        <span className="text-slate-900 font-semibold text-sm">{trekData?.guide}</span>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg px-4 py-3 border border-purple-100">
+                        <span className="text-xs font-medium text-purple-700 block mb-1">Roads</span>
+                        <span className="text-slate-900 font-semibold text-sm">{trekData?.transport}</span>
+                    </div>
+                    <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-lg px-4 py-3 border border-rose-100">
+                        <span className="text-xs font-medium text-rose-700 block mb-1">Altitude</span>
+                        <span className="text-slate-900 font-semibold text-sm">{trekData?.altitude}</span>
+                    </div>
+                    <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-lg px-4 py-3 border border-teal-100">
+                        <span className="text-xs font-medium text-teal-700 block mb-1">Budget</span>
+                        <span className="text-slate-900 font-semibold text-sm">{trekData?.estimatedBudget}</span>
+                    </div>
+                </div>
+            </section>
+
+            <div className="flex flex-col gap-6 w-full max-w-lg">
+                <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 h-6 bg-indigo-400 rounded-full"></div>
+                        <h2 className="text-xl font-bold text-slate-900">Things to Know</h2>
+                    </div>
+                    <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100">
+                        <span className="text-sm font-semibold text-slate-700 block mb-1">Currency</span>
+                        <span className="text-slate-900 font-medium">{trekData?.currency || 'N/A'}</span>
+                    </div>
+                    <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100">
+                        <span className="text-sm font-semibold text-slate-700 block mb-2">Advice</span>
+                        <p className="text-slate-700 text-sm leading-relaxed">{trekData?.advice || 'No specific advice available'}</p>
+                    </div>
+                    <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100">
+                        <span className="text-sm font-semibold text-slate-700 block mb-1">Distance</span>
+                        <span className="text-slate-900 font-medium">
+                            {trekData?.distance ? `${trekData?.distance.toFixed(1)} km from you` : 'Distance not available'}
                         </span>
+                    </div>
                     </div>
                 </div>
 
-                {/* Info */}
-                <ul className="space-y-2 text-base">
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Duration:</span>
-                        <span className="text-gray-500">{trekData?.duration}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Difficulty:</span>
-                        <span className="text-gray-500">{trekData?.difficulty}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Need of Guide:</span>
-                        <span className="text-gray-500">{trekData?.guide}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Avialability of Roads:</span>
-                        <span className="text-gray-500">{trekData?.transport}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Altitude:</span>
-                        <span className="text-gray-500">{trekData?.altitude}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-700">Budget:</span>
-                        <span className="text-gray-500">{trekData?.estimatedBudget}</span>
-                    </li>
-                </ul>
-            </section>
-
-            {/* Right Section */}
-            <div className="flex flex-col gap-10 w-full max-w-md">
-                {/* Things to Know */}
-                <div className="bg-white rounded-xl shadow p-8 border border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="inline-block w-1 h-5 bg-gray-400 rounded-full mr-2"></span>
-                        Things to Know
-                    </h2>
-                    <ul className="space-y-2 text-base">
-                        <li>
-                            <span className="font-medium text-gray-700">Currency:</span>{" "}
-                            <span className="text-gray-500">{trekData?.currency}</span>
-                        </li>
-                    
-                            <li>
-                                {trekData?.advice}
-                            </li>
-                    </ul>
-                </div>
-
-                {/* Places to View */}
-                <div className="bg-white rounded-xl shadow p-8 border border-gray-200 ">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                        <span className="inline-block w-1 h-5 bg-gray-400 rounded-full mr-2"></span>
-                        Places to View
-                    </h2>
-                    <div className="flex flex-wrap gap-2 ">
-                        {trekData.scenes?.map((place, idx) => (
+                <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-1 h-6 bg-emerald-400 rounded-full"></div>
+                        <h2 className="text-xl font-bold text-slate-900">Places to View</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {trekData?.scenes?.map((place, idx) => (
                             <span
                                 key={idx}
-                                className="px-3 py-1 rounded-full bg-gray-100 text-gray-800 font-medium shadow-sm text-base"
+                                className="px-3 py-2 rounded-full bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 font-medium text-sm border border-slate-200 hover:from-slate-200 hover:to-gray-200 transition-all"
                             >
                                 {place}
                             </span>
-                            
                         ))}
-                                            <button
-                        className="w-full mt-4 bg-gray-800 text-white rounded-lg h-12 text-base font-semibold hover:bg-gray-700 transition "
-                        onClick={() => setShowHotels((v) => !v)}
+                    </div>
+                    
+                    <button
+                        className="w-full bg-gradient-to-r from-slate-800 to-gray-800 text-white rounded-xl h-12 font-semibold hover:from-slate-900 hover:to-gray-900 transition-all duration-200 shadow-sm"
+                        onClick={() => setShowHotels(v => !v)}
                     >
                         {showHotels ? "Hide Hotels Nearby" : "Find Hotels Nearby"}
                     </button>
+                    
                     {showHotels && (
-                        <div className="mt-2 space-y-3">
-                            <h3 className="text-lg font-semibold text-center text-gray-800">Hotels Nearby</h3>
-                            <ul className="space-y-3">
-                                {trekData.hotels.map((hotel, idx) => (
-                                    <li
+                        <div className="mt-6 space-y-4">
+                            <h3 className="text-lg font-bold text-center text-slate-900">Hotels Nearby</h3>
+                            <div className="space-y-3">
+                                {hotels.map((hotel, idx) => (
+                                    <div
                                         key={idx}
-                                        className="flex flex-col md:flex-row md:justify-between md:items-center bg-gray-100 border border-gray-200 rounded-lg p-3 text-base shadow-sm"
+                                        className="bg-gradient-to-r from-slate-50 to-gray-50 border border-slate-200 rounded-xl p-4 hover:shadow-md transition-all"
                                     >
-                                        <span className="font-semibold text-gray-900">{hotel.name}</span>
-                                        <span className="text-gray-700">{hotel.location}</span>
-                                        <span className="text-gray-900 font-semibold">{hotel.price}</span>
-                                    </li>
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className="font-bold text-slate-900">{hotel.name}</span>
+                                            <span className="text-slate-900 font-bold bg-green-100 px-2 py-1 rounded-lg text-xs">{hotel.price}</span>
+                                        </div>
+                                        <span className="text-sm text-slate-600">{hotel.location}</span>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     )}
-                    </div>
                 </div>
             </div>
         </main>

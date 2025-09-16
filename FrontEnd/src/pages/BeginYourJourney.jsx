@@ -14,67 +14,95 @@ function BeginYourJourney() {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('authToken') || localStorage.getItem('userToken'); 
-      const userData = localStorage.getItem('userData') || localStorage.getItem('user');
-      const sessionToken = sessionStorage.getItem('authToken');
-      const hasAuthCookie = document.cookie.includes('auth=') || document.cookie.includes('session=');
-      const authenticated = !!(token || userData || sessionToken || hasAuthCookie);
-      
+      const token =
+        localStorage.getItem("authToken") || localStorage.getItem("userToken");
+      const userData =
+        localStorage.getItem("userData") || localStorage.getItem("user");
+      const sessionToken = sessionStorage.getItem("authToken");
+      const hasAuthCookie =
+        document.cookie.includes("auth=") ||
+        document.cookie.includes("session=");
+      const authenticated = !!(
+        token ||
+        userData ||
+        sessionToken ||
+        hasAuthCookie
+      );
+
       if (!authenticated) {
-        navigate('/login');
+        navigate("/login");
       }
     };
 
     checkAuth();
   }, [navigate]);
 
-
-
-  
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371; // Earth's radius in kilometers
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // Distance in kilometers
   };
 
   const sortTrekPlaces = (places, userLat, userLng) => {
     const difficultyWeight = { easy: 1, moderate: 2, hard: 3 };
-    
-    return places.map(place => ({
-      ...place,
-      distance: userLat && userLng ? 
-        calculateDistance(userLat, userLng, place.coordinates.lat, place.coordinates.lng) : 
-        0
-    })).sort((a, b) => {
-      // Primary sort: by distance (ascending)
-      const distanceDiff = a.distance - b.distance;
-      if (Math.abs(distanceDiff) > 1) { // If distance difference > 1km, sort by distance
-        return distanceDiff;
-      }
-      // Secondary sort: by difficulty (easy first, then moderate, then hard)
-      return difficultyWeight[a.difficulty] - difficultyWeight[b.difficulty];
-    });
+
+    return places
+      .map((place) => ({
+        ...place,
+        distance:
+          userLat && userLng
+            ? calculateDistance(
+                userLat,
+                userLng,
+                place.coordinates.lat,
+                place.coordinates.lng
+              )
+            : 0,
+      }))
+      .sort((a, b) => {
+        // Primary sort: by distance (ascending)
+        const distanceDiff = a.distance - b.distance;
+        if (Math.abs(distanceDiff) > 1) {
+          // If distance difference > 1km, sort by distance
+          return distanceDiff;
+        }
+        // Secondary sort: by difficulty (easy first, then moderate, then hard)
+        return difficultyWeight[a.difficulty] - difficultyWeight[b.difficulty];
+      });
   };
 
   const fetchLocationName = async (lat, lng) => {
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+    );
     const data = await res.json();
-    return data.address.city || data.address.town || data.address.village || data.address.county;
+    return (
+      data.address.city ||
+      data.address.town ||
+      data.address.village ||
+      data.address.county
+    );
   };
 
   const handleLocationClick = async () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
-        const locationName = await fetchLocationName(latitude, longitude);
-        setSearchQuery(locationName);
-      }, () => alert("Unable to retrieve your location."));
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lng: longitude });
+          const locationName = await fetchLocationName(latitude, longitude);
+          setSearchQuery(locationName);
+        },
+        () => alert("Unable to retrieve your location.")
+      );
     } else {
       alert("Geolocation is not supported by your browser.");
     }
@@ -93,7 +121,7 @@ function BeginYourJourney() {
         "color": "green|orange|red",
         "altitude": "elevation range in meters",
         "district": "nearest district",
-        "image" :"image url of ${location} using google places photoUri"
+        "image" :"https:// url of image of ${location}"
         "duration" :"duration of trek on foot",
         "scenes": ["scene1(place)", "scene2", "scene3","scene4"],
         "thingsToKnowBeforeVisiting": "detailed advice and precautions",
@@ -104,15 +132,20 @@ function BeginYourJourney() {
         "coordinates": { "lat": latitude, "lng": longitude }
       }
       Make sure to include a good mix of easy, moderate, and hard difficulty trails with accurate coordinates.`;
-      
+
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      let cleanedText = (await response.text()).replace(/```json|```/g, "").trim();
+      let cleanedText = (await response.text())
+        .replace(/```json|```/g, "")
+        .trim();
       const places = JSON.parse(cleanedText);
-      
+
       if (Array.isArray(places)) {
-        // Sort places by distance and difficulty
-        const sortedPlaces = sortTrekPlaces(places, userLocation?.lat, userLocation?.lng);
+        const sortedPlaces = sortTrekPlaces(
+          places,
+          userLocation?.lat,
+          userLocation?.lng
+        );
         setTrekPlaces(sortedPlaces);
       }
     } catch (error) {
@@ -132,8 +165,11 @@ function BeginYourJourney() {
           estimatedBudget: "50-100",
           availabilityOfRoadTransport: "yes",
           needOfGuide: "no",
-          coordinates: { lat: userLocation?.lat || 0, lng: userLocation?.lng || 0 },
-          distance: 0
+          coordinates: {
+            lat: userLocation?.lat || 0,
+            lng: userLocation?.lng || 0,
+          },
+          distance: 0,
         },
         {
           name: "Sample Moderate Trek Near " + location,
@@ -144,14 +180,18 @@ function BeginYourJourney() {
           image: "www.facebook.com/image/2",
           altitude: "800 - 1200m",
           scenes: ["Mountain views", "Forest trails", "Rocky paths"],
-          thingsToKnowBeforeVisiting: "Good fitness required. Carry proper gear.",
+          thingsToKnowBeforeVisiting:
+            "Good fitness required. Carry proper gear.",
           currency: "NPR/USD",
           estimatedBudget: "150-300",
           availabilityOfRoadTransport: "no",
           needOfGuide: "yes",
-          coordinates: { lat: (userLocation?.lat || 0) + 0.01, lng: (userLocation?.lng || 0) + 0.01 },
-          distance: userLocation ? 1.5 : 0
-        }
+          coordinates: {
+            lat: (userLocation?.lat || 0) + 0.01,
+            lng: (userLocation?.lng || 0) + 0.01,
+          },
+          distance: userLocation ? 1.5 : 0,
+        },
       ];
       setTrekPlaces(samplePlaces);
     } finally {
@@ -164,14 +204,25 @@ function BeginYourJourney() {
     if (searchQuery.trim()) await generateTrekkingPlaces(searchQuery);
   };
 
-  const colorMap = { green: "bg-green-400", orange: "bg-amber-400", red: "bg-rose-400" };
+  const colorMap = {
+    green: "bg-green-400",
+    orange: "bg-amber-400",
+    red: "bg-rose-400",
+  };
+  const colorMap2 = {
+    green: "border-green-400",
+    orange: "border-amber-400",
+    red: "border-rose-400",
+  };
 
   const renderTrekPlaces = () => {
     return trekPlaces.map((place, index) => (
       <div
         key={index}
         id="eachTrekPlace"
-        className="flex flex-col justify-between items-stretch rounded-xl border border-gray-300 bg-white min-w-[220px] max-w-xs w-full max-h-120 overflow-scroll gap-3 cursor-pointer hover:shadow-lg transition-shadow"
+        className={`flex flex-col justify-between items-stretch rounded-xl border-2  ${
+          colorMap2[place.color]
+        } bg-white min-w-[220px] max-w-xs w-full max-h-120 overflow-scroll gap-3 cursor-pointer hover:shadow-lg transition-shadow`}
         onClick={() =>
           navigate("/trekhome", {
             state: {
@@ -188,57 +239,87 @@ function BeginYourJourney() {
               guide: place.needOfGuide,
               advice: place.thingsToKnowBeforeVisiting,
               scenes: place.scenes,
-              distance: place.distance
+              distance: place.distance,
             },
           })
         }
       >
-        <div className="flex items-center justify-between gap-2 mb-1 p-2">
-          <div className="flex items-center gap-2">
-            <span
-              className={`w-3 h-3 rounded-full ${colorMap[place.color] || "bg-gray-400"}`}
-            ></span>
-            <span className="text-xs text-gray-600 capitalize">{place.difficulty}</span>
-          </div>
-          {place.distance > 0 && (
-            <span className="text-xs text-blue-600 font-medium">
-              {place.distance.toFixed(1)} km
+        <div className="flex items-center justify-between gap-2 mb-1 ">
+          <div className="bg-slate-50 w-full p-2 flex justify-between">
+            <div className={"flex items-center gap-2"}>
+              <span
+                className={`w-3 h-3 rounded-full ${
+                  colorMap[place.color] || "bg-gray-400"
+                }`}
+              ></span>
+              <span className="text-xs text-gray-600 capitalize">
+                {place.difficulty}
+              </span>
+            </div>
+            <span className="text-xs text-gray-600 capitalize">
+              {place.duration}
             </span>
+            {place.distance > 0 && (
+              <span className={`text-xs  font-medium`}>
+                {place.distance.toFixed(1)} km
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="p-1 gap-2 flex flex-col">
+          <div className="font-semibold  text-xl text-gray-900 text-center p-2">
+            <span className=" block">{place.name}</span>
+          </div>
+
+          <div className="flex flex-col gap-0.5 text-xs text-gray-500 mb-1 px-2">
+            <div className="bg-slate-50 w-full p-2 flex justify-between">
+              <span>
+                <span className="text-gray-700 font-semibold">Altitude:</span>{" "}
+                {place.altitude}
+              </span>
+            </div>
+            <div className="bg-slate-50 w-full p-2 flex justify-between">
+              <span>
+                <span className="text-gray-700 font-semibold">Guide:</span>{" "}
+                {place.needOfGuide}
+              </span>
+            </div>
+            <div className="bg-slate-50 w-full p-2 mb-2 flex justify-between">
+              <span>
+                <span className="text-gray-700 font-semibold">Transport:</span>{" "}
+                {place.availabilityOfRoadTransport}
+              </span>
+            </div>
+          <div className="bg-slate-50 w-full rounded-b-xl flex justify-between">
+            <div className="text-xs text-gray-600 mb-2 px-2">
+              <span className="font-semibold">Scenes:</span>{" "}
+              {place.scenes?.join(", ") || "N/A"}
+            </div>
+          </div>
+          </div>
+
+
+          {index === 0 && place.distance > 0 && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-2 mx-2 mb-2">
+              <span className="text-xs text-green-700 font-medium">
+                🎯 Closest to you!
+              </span>
+            </div>
           )}
         </div>
-        
-        <div className="w-full aspect-square bg-gray-50 flex items-center justify-center rounded-lg border border-gray-100 mb-1 mx-2">
-          <img src={place.image} alt={place.name} className="w-full h-full object-cover rounded-lg" />
-        </div>
-        
-        <div className="font-semibold text-xl text-gray-900 text-center mb-1 px-2">
-          {place.name}
-        </div>
-        
-        <div className="flex flex-col gap-0.5 text-xs text-gray-500 mb-1 px-2">
-          <span><span className="text-gray-700">Altitude:</span> {place.altitude}</span>
-          <span><span className="text-gray-700">Duration:</span> {place.duration}</span>
-          <span><span className="text-gray-700">Guide:</span> {place.needOfGuide}</span>
-          <span><span className="text-gray-700">Transport:</span> {place.availabilityOfRoadTransport}</span>
-        </div>
-        
-        <div className="text-xs text-gray-600 mb-2 px-2">
-          <span className="text-indigo-500">Scenes:</span> {place.scenes?.join(", ") || "N/A"}
-        </div>
-        
-        {index === 0 && place.distance > 0 && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-2 mx-2 mb-2">
-            <span className="text-xs text-green-700 font-medium">🎯 Closest to you!</span>
-          </div>
-        )}
       </div>
     ));
   };
 
   return (
     <div className="min-h-screen bg-neutral-50 p-4 flex flex-col items-center gap-8">
-      <form className="w-full max-w-3xl flex flex-col gap-4 p-6 rounded-3xl bg-white shadow-md" onSubmit={handleSearch}>
-        <h2 className="text-2xl font-semibold text-center text-neutral-900">Trekking Place Booking</h2>
+      <form
+        className="w-full max-w-full flex flex-col gap-4 p-6 rounded-xl bg-white shadow-md"
+        onSubmit={handleSearch}
+      >
+        <h2 className="text-2xl font-semibold text-center text-neutral-900">
+          Trekking Place Booking
+        </h2>
         <div className="flex gap-3">
           <input
             type="text"
@@ -260,7 +341,9 @@ function BeginYourJourney() {
           type="submit"
           disabled={isLoading}
           title="Search trekking places"
-          className={`h-12 w-full rounded-xl text-neutral-50 font-semibold text-lg ${isLoading ? "bg-neutral-400" : "bg-neutral-800 hover:bg-neutral-900"} transition cursor-pointer`}
+          className={`h-12 w-full rounded-xl text-neutral-50 font-semibold text-lg ${
+            isLoading ? "bg-neutral-400" : "bg-neutral-800 hover:bg-neutral-900"
+          } transition cursor-pointer`}
         >
           {isLoading ? "⏳ Searching..." : "Search"}
         </button>
@@ -270,21 +353,28 @@ function BeginYourJourney() {
           </div>
         )}
       </form>
-      
+
       {isLoading && (
         <div className="text-center text-neutral-600">
-          <div className="animate-pulse">🏔️ Generating trekking places...</div>
-          <div className="text-sm mt-2">Finding trails sorted by distance and difficulty</div>
+          <div className="animate-pulse text-3xl font-bold">
+            {" "}
+            Generating trekking places...
+          </div>
+          <div className="text-sm mt-2">
+            Finding trails sorted by distance and difficulty
+          </div>
         </div>
       )}
-      
+
       {trekPlaces.length > 0 && (
         <div className="w-full max-w-7xl">
           <div className="text-center mb-4">
             <h3 className="text-lg font-semibold text-gray-800">
               Found {trekPlaces.length} trails • Sorted by distance & difficulty
             </h3>
-            <p className="text-sm text-gray-600">Closest and easiest trails appear first</p>
+            <p className="text-sm text-gray-600">
+              Closest and easiest trails appear first
+            </p>
           </div>
           <div className="flex flex-wrap gap-6 justify-center">
             {renderTrekPlaces()}
