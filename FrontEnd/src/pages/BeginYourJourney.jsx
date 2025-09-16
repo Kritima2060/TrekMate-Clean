@@ -8,6 +8,14 @@ function BeginYourJourney() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const [showReportWindow, setShowReportWindow] = useState(false);
+  const [showChatWindow, setShowChatWindow] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
   const apiKey = import.meta.env.VITE_REACT_APP_GEMINI_API_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
   const navigate = useNavigate();
@@ -46,27 +54,27 @@ function BeginYourJourney() {
 
     checkAuth();
 
-      if (!isLoading) {
-    setProgress(0);
-    setCurrentStep(0);
-    return;
-  }
+    if (!isLoading) {
+      setProgress(0);
+      setCurrentStep(0);
+      return;
+    }
 
-  const interval = setInterval(() => {
-    setProgress(prev => {
-      const newProgress = prev + Math.random() * 8 + 2;
-      
-      if (newProgress >= 100) return 100;
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        const newProgress = prev + Math.random() * 8 + 2;
 
-      const stepIndex = Math.floor((newProgress / 100) * steps.length);
-      setCurrentStep(Math.min(stepIndex, steps.length - 1));
+        if (newProgress >= 100) return 100;
 
-      return newProgress;
-    });
-  }, 5000);
+        const stepIndex = Math.floor((newProgress / 100) * steps.length);
+        setCurrentStep(Math.min(stepIndex, steps.length - 1));
 
-  return () => clearInterval(interval);
-  }, [navigate,isLoading]);
+        return newProgress;
+      });
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [navigate, isLoading]);
 
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371; // Earth's radius in kilometers
@@ -342,7 +350,34 @@ function BeginYourJourney() {
   };
 
   return (
-    <div className="min-h-screen   bg-neutral-50  flex flex-col items-center gap-8">
+    <div className="min-h-screen bg-neutral-50 flex flex-col items-center gap-8">
+      {/* Fixed Buttons */}
+      <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-50">
+        <button
+          // onClick={handleReportClick}
+          className="w-12 h-12 bg-red-600 shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
+          title="Report an issue"
+        >
+          🚨
+        </button>
+        <button
+          className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
+          title="AI Assistant"
+        >
+          <svg
+            className="w-5 h-5 text-slate-700"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
       <form
         className="w-full mt-32 max-w-5xl flex flex-col gap-4 p-6 rounded-lg bg-white shadow-md"
         onSubmit={handleSearch}

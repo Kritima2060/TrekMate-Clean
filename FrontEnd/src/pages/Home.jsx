@@ -23,10 +23,10 @@ const HomePage = () => {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h1 className="text-5xl md:text-7xl font-extralight leading-tight tracking-tight">
-              Trek
+              Trek Smarter. 
               <br />
-              <span className="font-light bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
-                Smarter
+              <span className="font-light bg-gradient-to-r from-slate-900 to-orange-500 bg-clip-text text-transparent">
+                Trek Safer.
               </span>
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed max-w-md">
@@ -34,9 +34,9 @@ const HomePage = () => {
               features, and curated experiences.
             </p>
             <Link to="/beginyourjourney">
-              <button className="group relative overflow-hidden bg-slate-900 rounded-lg text-white px-8 py-4 text-lg font-light tracking-wide hover:bg-slate-800 transition-all duration-300 cursor-pointer">
+              <button className="group relative overflow-hidden bg-slate-900 rounded-sm text-white px-8 py-4 text-lg font-light tracking-wide hover:bg-slate-800 transition-all duration-300 cursor-pointer">
                 <span className="relative z-10">Begin Journey</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-slate-700 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-orange-500 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
               </button>
             </Link>
           </div>
@@ -59,7 +59,7 @@ const HomePage = () => {
       </section>
 
 
-      <div className="fixed bottom-8 right-8 flex flex-col gap-3 z-50">
+      <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-50">
         <Link
           to="/weather"
           className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
@@ -83,22 +83,6 @@ const HomePage = () => {
             <path
               fillRule="evenodd"
               d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <button
-          className="w-12 h-12 bg-red-500 shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 cursor-pointer"
-          title="Emergency SOS"
-        >
-          <svg
-            className="w-5 h-5 text-white"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
               clipRule="evenodd"
             />
           </svg>
