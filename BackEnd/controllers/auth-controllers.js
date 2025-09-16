@@ -9,6 +9,7 @@ const home = async (req, res) => {
   }
 };
 
+
 const registration = async (req, res, next) => {
   try {
     const { fullName, email, password, confirmPassword } = req.body;
@@ -26,6 +27,7 @@ const registration = async (req, res, next) => {
 
     const userCreated = await User.create({ fullName, email, password });
 
+
     res.status(201).json({
       msg: "Registration Successfull",
       token: await userCreated.generateToken(),
@@ -35,6 +37,8 @@ const registration = async (req, res, next) => {
         email: userCreated.email,
       },
     });
+
+    localStorage.setItem("user",res.status(201).json.user)
   } catch (error) {
     next(error);
   }

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  // console.log(user?.fullName)
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = () => {

@@ -43,10 +43,10 @@ const Register = () => {
     e.preventDefault();
 
     // client-side validation
-    //if (formData.password !== formData.confirmPassword) {
-      //alert("Passwords do not match!");
-     // return;
-    //}
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+     return;
+    }
 
     try {
       const response = await fetch(URL, {
@@ -64,7 +64,7 @@ const Register = () => {
 
         //Save user token
         storeTokenInLS(responseData.token);
-        // localStorage.setItem("token", responseData.token);
+        // localStorage.setItem("token", responseData);
         
         // reset form
         setFormData({

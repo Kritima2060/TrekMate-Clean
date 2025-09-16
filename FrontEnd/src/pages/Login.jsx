@@ -43,9 +43,9 @@ const Login = () => {
         // Save user info + token
         storeTokenInLS(responseData.token);
 
-        // localStorage.setItem("user", JSON.stringify(responseData.user));
-        // // localStorage.setItem("token", responseData.token);
-        // localStorage.setItem("loggedIn", true);
+        localStorage.setItem("user", JSON.stringify(responseData.user));
+        localStorage.setItem("token", responseData.token);
+        localStorage.setItem("loggedIn", true);
 
         // Clear form
         setFormData({ email: "", password: "" });
