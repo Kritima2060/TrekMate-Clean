@@ -122,7 +122,7 @@ function BeginYourJourney() {
         "altitude": "elevation range in meters",
         "district": "nearest district",
         "image" :"https:// url of image of ${location}"
-        "duration" :"duration of trek on foot",
+        "duration" :"duration of trek on foot in hrs or days (no extra text)",
         "scenes": ["scene1(place)", "scene2", "scene3","scene4"],
         "thingsToKnowBeforeVisiting": "detailed advice and precautions",
         "estimatedBudget": "budget with currency",
@@ -267,7 +267,7 @@ function BeginYourJourney() {
           </div>
         </div>
         <div className="p-1 gap-2 flex flex-col">
-          <div className="font-semibold  text-xl text-gray-900 text-center p-2">
+          <div className="font-semibold  text-xl text-gray-900 text-center flex  justify-center items-center h-full p-2">
             <span className=" block">{place.name}</span>
           </div>
 
@@ -312,13 +312,13 @@ function BeginYourJourney() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 p-4 flex flex-col items-center gap-8">
+    <div className="min-h-screen   bg-neutral-50  flex flex-col items-center gap-8">
       <form
-        className="w-full max-w-full flex flex-col gap-4 p-6 rounded-xl bg-white shadow-md"
+        className="w-full mt-32 max-w-5xl flex flex-col gap-4 p-6 rounded-xl bg-white shadow-md"
         onSubmit={handleSearch}
       >
         <h2 className="text-2xl font-semibold text-center text-neutral-900">
-          Trekking Place Booking
+         Find Treks <span>Nearby</span>
         </h2>
         <div className="flex gap-3">
           <input
