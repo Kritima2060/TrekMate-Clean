@@ -344,7 +344,7 @@ function BeginYourJourney() {
   return (
     <div className="min-h-screen   bg-neutral-50  flex flex-col items-center gap-8">
       <form
-        className="w-full mt-32 max-w-5xl flex flex-col gap-4 p-6 rounded-xl bg-white shadow-md"
+        className="w-full mt-32 max-w-5xl flex flex-col gap-4 p-6 rounded-lg bg-white shadow-md"
         onSubmit={handleSearch}
       >
         <h2 className="text-2xl font-semibold text-center text-neutral-900">
@@ -354,7 +354,7 @@ function BeginYourJourney() {
           <input
             type="text"
             placeholder="Search treks by place"
-            className="flex-1 h-12 px-4 border border-neutral-300 rounded-xl text-neutral-900 text-lg focus:outline-none focus:ring-2 focus:ring-neutral-400"
+            className="flex-1 h-12 px-4 border border-neutral-300 rounded-lg text-neutral-900 text-lg focus:outline-none focus:ring-2 focus:ring-neutral-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

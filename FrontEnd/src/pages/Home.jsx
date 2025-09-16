@@ -34,7 +34,7 @@ const HomePage = () => {
               features, and curated experiences.
             </p>
             <Link to="/beginyourjourney">
-              <button className="group relative overflow-hidden bg-slate-900 rounded-xl text-white px-8 py-4 text-lg font-light tracking-wide hover:bg-slate-800 transition-all duration-300 cursor-pointer">
+              <button className="group relative overflow-hidden bg-slate-900 rounded-lg text-white px-8 py-4 text-lg font-light tracking-wide hover:bg-slate-800 transition-all duration-300 cursor-pointer">
                 <span className="relative z-10">Begin Journey</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-slate-700 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
               </button>
@@ -42,16 +42,16 @@ const HomePage = () => {
           </div>
 
           <div className="relative">
-            <div className="aspect-[3/3] overflow-hidden">
+            <div className="aspect-[3/3] rounded-lg overflow-hidden">
               {/* <img
                 src={templeImage}
                 alt="Mountain landscape"
                 className="w-full  h-full object-cover absolute hover:red transition-all duration-700"
               /> */}
               <img
-                src={templeImage3}
+                src={templeImage}
                 alt="Mountain landscape"
-                className="w-full left-1 h-full absolute object-cover "
+                className="w-full left-1 h-full rounded-lg  absolute object-cover "
               />
             </div>
           </div>
@@ -116,19 +116,19 @@ const HomePage = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { img: abcImage, title: "Annapurna Base Camp" },
             { img: secDes, title: "Everest Base Camp" },
             { img: ThirdDes, title: "Langtang Valley" },
             { img: fourthDes, title: "Manaslu Circuit" },
           ].map((destination, index) => (
-            <div key={index} className="group cursor-pointer">
+            <div key={index} className="group cursor-pointer ">
               <div className="aspect-[4/5] overflow-hidden mb-4">
                 <img
                   src={destination.img}
                   alt={destination.title}
-                  className="w-full h-full object-cover  group-hover:scale-105 transition-all duration-700"
+                  className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-all duration-700"
                 />
               </div>
               <h3 className="font-light text-lg tracking-wide text-slate-700 group-hover:text-slate-900 transition-colors">
