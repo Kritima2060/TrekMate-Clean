@@ -1,5 +1,5 @@
 import "../App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,25 @@ function BeginYourJourney() {
   const genAI = new GoogleGenerativeAI(apiKey);
   const navigate = useNavigate();
 
-  // Calculate distance between two coordinates using Haversine formula
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('userToken'); 
+      const userData = localStorage.getItem('userData') || localStorage.getItem('user');
+      const sessionToken = sessionStorage.getItem('authToken');
+      const hasAuthCookie = document.cookie.includes('auth=') || document.cookie.includes('session=');
+      const authenticated = !!(token || userData || sessionToken || hasAuthCookie);
+      
+      if (!authenticated) {
+        navigate('/login');
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
+
+
+
+  
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371; // Earth's radius in kilometers
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -24,7 +42,7 @@ function BeginYourJourney() {
     return R * c; // Distance in kilometers
   };
 
-  // Sort places by distance and then by difficulty
+
   const sortTrekPlaces = (places, userLat, userLng) => {
     const difficultyWeight = { easy: 1, moderate: 2, hard: 3 };
     
