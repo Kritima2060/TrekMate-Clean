@@ -66,7 +66,7 @@ const HomePage = () => {
     <img src={sos} alt="SOS" className="w-12 h-12 md:w-12 md:h-12" />
   </Link>
   <Link
-    to="/error"
+    to="/weather"
     className="cursor-pointer hover:scale-105 transition"
     title="Weather Alerts"
   >

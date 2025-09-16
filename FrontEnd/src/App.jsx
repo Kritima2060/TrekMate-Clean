@@ -14,6 +14,7 @@ import Error from "./pages/Error";
 import Faqs from "./pages/Faqs";
 import Contact from "./pages/contact";
 import TrekHome from "./pages/trekHome";
+import Weather from "./Components/WeatherUpdate";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/error" element={<Error/>}/>
         <Route path="/faqs" element={<Faqs/>}/>
         <Route path="/contact" element={<Contact/>}/>
+        <Route path="/weather" element={<Weather/>}/>
         
       </Routes>
       <Footer/>

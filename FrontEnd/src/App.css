@@ -886,6 +886,43 @@ width: 60px;
 }
 
 
+/* ********* Weather Update********** */
+
+.WeatherUpdate
+{
+  text-align: center;
+  margin: 1em;
+}
+.SearchCity input{
+  padding: 10px;
+  border: none;
+  background-color: #ffffff;
+}
+.WeatherUpdate button{
+  padding: 10px;
+  background-color: #4A6C84;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+.SearchCity{
+  margin: 1em;
+}
+.WeatherUpdate p{
+  padding: 10px;
+}
+.WeatherUpdate_header{
+    width: 50%;
+    position: relative;
+    right: -25%;
+    background-color: #70a0bd26;
+    border-radius: 10px;
+    padding: 2em;
+    top: 5em;
+
+}
+
+
 
 
 @media screen  and (min-width: 400px){
