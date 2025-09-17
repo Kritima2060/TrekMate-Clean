@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../App.css";
 import { useAuth } from "../store/auth";
+import {toast} from "react-toastify";
 
 const URL = "http://localhost:5555/api/auth/login";
 
@@ -50,10 +51,11 @@ const Login = () => {
         // Clear form
         setFormData({ email: "", password: "" });
 
+           toast.success("Login Successful");
         // Redirect to home page
         navigate("/");
       } else {
-        setError(responseData.message || "Invalid email or password");
+        toast.error(responseData.extraDetails? responseData.extraDetails : responseData.message);
       }
     } catch (error) {
       console.error("Error:", error);

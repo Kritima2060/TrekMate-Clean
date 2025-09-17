@@ -1,17 +1,6 @@
 const {z} = require("zod");
 
-//crating an object schema
-
-const signupSchema = z.object({
-   fullName: z
-    .string({ required_error: "Name is required" })
-    .trim()
-    .min(3, { message: "Name must be at least of 3 characters" })
-    .max(255, { message: "Name must not be more than 255 characters" })
-    .regex(/^[A-Za-z]+ [A-Za-z]+$/, {
-    message: "Full name must contain first and last name"}),
-
-
+const loginSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .trim()
@@ -26,6 +15,20 @@ const signupSchema = z.object({
     .max(1024, "Password can't be greater than 1024 characters")
     .regex(/[A-Z]/, { message: "Password must include at least one uppercase letter" })
     .regex(/[!@#$%^&*()[\]{}_\-+=~`|:;'",.<>/?\\]/, { message: "Password must include at least one special character" }),
+})
+
+//crating an object schema
+
+const signupSchema = loginSchema.extend({
+   fullName: z
+    .string({ required_error: "Name is required" })
+    .trim()
+    .min(3, { message: "Name must be at least of 3 characters" })
+    .max(255, { message: "Name must not be more than 255 characters" })
+    .regex(/^[A-Za-z]+ [A-Za-z]+$/, {
+    message: "Full name must contain first and last name"}),
+
+
 
   confirmPassword: z
       .string({ required_error: "Please confirm your password" }),
@@ -37,4 +40,4 @@ const signupSchema = z.object({
 });
 
 
-module.exports= signupSchema;
+module.exports= {signupSchema, loginSchema};
