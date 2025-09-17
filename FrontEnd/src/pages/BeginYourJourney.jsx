@@ -376,7 +376,7 @@ function BeginYourJourney() {
 
         return newProgress;
       });
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(interval);
   }, [navigate, isLoading]);
