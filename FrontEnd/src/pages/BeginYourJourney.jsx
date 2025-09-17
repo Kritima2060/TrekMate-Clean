@@ -3,6 +3,311 @@ import React, { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useNavigate } from "react-router-dom";
 
+// Enhanced AI Service with completely free alternatives
+class AIService {
+  constructor() {
+    this.services = [
+      {
+        name: "Gemini",
+        apiKey: import.meta.env.VITE_REACT_APP_GEMINI_API_KEY,
+        generate: this.generateWithGemini.bind(this),
+      },
+      {
+        name: "Hugging Face (Mistral)",
+        apiKey: import.meta.env.VITE_REACT_APP_HUGGINGFACE_API_KEY,
+        generate: this.generateWithHuggingFaceMistral.bind(this),
+      },
+      {
+        name: "Hugging Face (CodeLlama)",
+        apiKey: import.meta.env.VITE_REACT_APP_HUGGINGFACE_API_KEY,
+        generate: this.generateWithHuggingFaceCodeLlama.bind(this),
+      },
+      {
+        name: "Groq",
+        apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
+        generate: this.generateWithGroq.bind(this),
+      },
+    ];
+  }
+
+  async generateTrekkingPlaces(location) {
+    const prompt = this.createPrompt(location);
+    const generateFallbackImages = (placeName) => {
+      const fallbackImages = [
+        {
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          description: "Mountain landscape",
+          photographer: "John Doe",
+          source: "Unsplash",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1464822759844-d150f39bf2c8?w=800&h=600&fit=crop",
+          description: "Hiking trail",
+          photographer: "Jane Smith",
+          source: "Unsplash",
+        },
+        {
+          url: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=600&fit=crop",
+          description: "Forest path",
+          photographer: "Mike Johnson",
+          source: "Unsplash",
+        },
+      ];
+      return fallbackImages.map((img) => ({
+        ...img,
+        description: `${placeName} - ${img.description}`,
+      }));
+    };
+
+    for (const service of this.services) {
+      if (!service.apiKey) {
+        console.log(`Skipping ${service.name} - no API key configured`);
+        continue;
+      }
+
+      try {
+        console.log(`Attempting with ${service.name}...`);
+        const result = await service.generate(prompt);
+        console.log(`✅ Success with ${service.name}`);
+        return { data: result, service: service.name };
+      } catch (error) {
+        console.error(`❌ ${service.name} failed:`, error.message);
+        continue;
+      }
+    }
+    if (Array.isArray(result.data) && result.data.length > 0) {
+      // Ensure each place has galleryImages
+      const placesWithImages = result.data.map((place) => ({
+        ...place,
+        galleryImages:
+          place.galleryImages && place.galleryImages.length > 0
+            ? place.galleryImages
+            : generateFallbackImages(place.name),
+      }));
+
+      const sortedPlaces = sortTrekPlaces(
+        placesWithImages,
+        userLocation?.lat,
+        userLocation?.lng
+      );
+      setTrekPlaces(sortedPlaces);
+    }
+
+    throw new Error("All AI services failed or no API keys configured");
+  }
+
+  createPrompt(location) {
+    return `Generate a JSON array of 8-10 trekking places near ${location}. Each place should have:
+  {
+    "name": "Place Name",
+    "difficulty": "easy|moderate|hard",
+    "color": "green|orange|red",
+    "altitude": "elevation range in meters",
+    "district": "nearest district/region",
+    "duration": "duration of trek on foot in hrs or days (no extra text)",
+    "scenes": ["scene1(place)", "scene2", "scene3", "scene4"],
+    "thingsToKnowBeforeVisiting": "detailed advice and precautions",
+    "estimatedBudget": "budget with currency",
+    "currency": "local currency",
+    "availabilityOfRoadTransport": "yes|no|partial",
+    "needOfGuide": "yes|no|recommended",
+    "coordinates": { "lat": latitude, "lng": longitude },
+    "galleryImages": [
+      {
+        "url": "https://images.unsplash.com/photo-realistic-url",
+        "description": "scenic description",
+        "photographer": "photographer name",
+        "source": "Unsplash"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-realistic-url2",
+        "description": "scenic description2",
+        "photographer": "photographer name",
+        "source": "Unsplash"
+      }
+    ]
+  }
+  Include 3-4 realistic gallery images per place. Return only valid JSON array.`;
+  }
+
+  async generateWithGemini(prompt) {
+    const genAI = new GoogleGenerativeAI(
+      import.meta.env.VITE_REACT_APP_GEMINI_API_KEY
+    );
+    // Fixed model name - use gemini-1.5-flash instead of gemini-2.5-flash
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+
+    return this.parseJSON(text);
+  }
+
+  async generateWithHuggingFaceMistral(prompt) {
+    // Using Mistral 7B Instruct - completely free
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${
+            import.meta.env.VITE_REACT_APP_HUGGINGFACE_API_KEY
+          }`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: 4000,
+            temperature: 0.7,
+            do_sample: true,
+            return_full_text: false,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Hugging Face Mistral API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    const text = data[0]?.generated_text || data.generated_text || "";
+    return this.parseJSON(text);
+  }
+
+  async generateWithHuggingFaceCodeLlama(prompt) {
+    // Using CodeLlama for structured output
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/codellama/CodeLlama-7b-Instruct-hf",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${
+            import.meta.env.VITE_REACT_APP_HUGGINGFACE_API_KEY
+          }`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: 4000,
+            temperature: 0.3,
+            do_sample: true,
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Hugging Face CodeLlama API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    const text = data[0]?.generated_text || data.generated_text || "";
+    return this.parseJSON(text);
+  }
+
+  async generateWithGroq(prompt) {
+    // Groq offers free fast inference
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${
+            import.meta.env.VITE_REACT_APP_GROQ_API_KEY
+          }`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+          model: "llama3-8b-8192", // Free model on Groq
+          max_tokens: 4000,
+          temperature: 0.7,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Groq API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    return this.parseJSON(data.choices[0]?.message?.content || "");
+  }
+
+  parseJSON(text) {
+    if (!text || text.trim() === "") {
+      throw new Error("Empty response from AI service");
+    }
+
+    // Clean the text by removing markdown code blocks and extra whitespace
+    let cleanedText = text
+      .replace(/```json|```/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    // Remove any text before the first [ and after the last ]
+    const firstBracket = cleanedText.indexOf("[");
+    const lastBracket = cleanedText.lastIndexOf("]");
+
+    if (
+      firstBracket !== -1 &&
+      lastBracket !== -1 &&
+      lastBracket > firstBracket
+    ) {
+      cleanedText = cleanedText.substring(firstBracket, lastBracket + 1);
+    }
+
+    try {
+      const result = JSON.parse(cleanedText);
+      if (Array.isArray(result) && result.length > 0) {
+        return result;
+      }
+      throw new Error("Parsed result is not a valid array");
+    } catch (error) {
+      try {
+        // Try to find JSON objects in the text
+        const jsonMatches = cleanedText.match(
+          /\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g
+        );
+        if (jsonMatches && jsonMatches.length > 0) {
+          const objects = jsonMatches
+            .map((match) => {
+              try {
+                return JSON.parse(match);
+              } catch (e) {
+                return null;
+              }
+            })
+            .filter((obj) => obj !== null);
+
+          if (objects.length > 0) {
+            return objects;
+          }
+        }
+      } catch (e) {
+        console.error("Alternative parsing failed:", e);
+      }
+
+      throw new Error(`Failed to parse JSON response: ${error.message}`);
+    }
+  }
+}
+
 function BeginYourJourney() {
   const [trekPlaces, setTrekPlaces] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,12 +320,12 @@ function BeginYourJourney() {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [currentAIService, setCurrentAIService] = useState("");
 
-  const apiKey = import.meta.env.VITE_REACT_APP_GEMINI_API_KEY;
-  const genAI = new GoogleGenerativeAI(apiKey);
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const aiService = new AIService();
 
   const steps = [
     "Analyzing terrain...",
@@ -71,7 +376,7 @@ function BeginYourJourney() {
 
         return newProgress;
       });
-    }, 6000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [navigate, isLoading]);
@@ -148,91 +453,155 @@ function BeginYourJourney() {
   };
 
   const generateTrekkingPlaces = async (location) => {
-    if (!apiKey) return alert("API key not configured.");
+    if (!location.trim()) {
+      alert("Please enter a location to search for treks.");
+      return;
+    }
+
     setIsLoading(true);
+    setCurrentAIService("");
+
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-      const prompt = `
-      Generate a JSON array of 8-12 trekking places near ${location}. Each place should have:
-      {
-        "name": "Place Name",
-        "difficulty": "easy|moderate|hard",
-        "color": "green|orange|red",
-        "altitude": "elevation range in meters",
-        "district": "nearest district",
-        "image" :"https:// url of image of ${location}"
-        "duration" :"duration of trek on foot in hrs or days (no extra text)",
-        "scenes": ["scene1(place)", "scene2", "scene3","scene4"],
-        "thingsToKnowBeforeVisiting": "detailed advice and precautions",
-        "estimatedBudget": "budget with currency",
-        "currency": "local currency",
-        "availabilityOfRoadTransport": "yes|no",
-        "needOfGuide": "yes|no",
-        "coordinates": { "lat": latitude, "lng": longitude }
-      }
-      Make sure to include a good mix of easy, moderate, and hard difficulty trails with accurate coordinates.`;
+      const result = await aiService.generateTrekkingPlaces(location);
+      setCurrentAIService(result.service);
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      let cleanedText = (await response.text())
-        .replace(/```json|```/g, "")
-        .trim();
-      const places = JSON.parse(cleanedText);
-
-      if (Array.isArray(places)) {
+      if (Array.isArray(result.data) && result.data.length > 0) {
         const sortedPlaces = sortTrekPlaces(
-          places,
+          result.data,
           userLocation?.lat,
           userLocation?.lng
         );
         setTrekPlaces(sortedPlaces);
+      } else {
+        throw new Error("Invalid response format from AI service");
       }
     } catch (error) {
-      console.error("Error generating places:", error);
+      console.error("All AI services failed:", error);
+
+      // Show user-friendly error message
+      alert(
+        `Unable to generate trek recommendations. Using sample data instead.`
+      );
+
+      // Fallback to enhanced sample data
       const samplePlaces = [
         {
-          name: "Sample Easy Trek Near " + location,
+          name: "Sample Trek Near " + location,
           difficulty: "easy",
           color: "green",
-          district: "Morang",
-          duration: "4 hrs",
-          image: "www.facebook.com/image/1",
-          altitude: "300 - 500m",
-          scenes: ["River views", "Local wildlife", "Easy trails"],
-          thingsToKnowBeforeVisiting: "Carry water and snacks.",
-          currency: "NPR/USD",
-          estimatedBudget: "50-100",
+          district: "Local District",
+          duration: "3-4 hrs",
+          image:
+            "https://images.unsplash.com/photo-1464822759844-d150f39bf2c8?w=400",
+          altitude: "200 - 600m",
+          scenes: [
+            "Mountain sunrise",
+            "Forest trails",
+            "Bird watching",
+            "Local villages",
+          ],
+          thingsToKnowBeforeVisiting:
+            "Carry water, wear comfortable shoes. Best visited early morning for sunrise views.",
+          currency: "USD",
+          estimatedBudget: "30-80",
           availabilityOfRoadTransport: "yes",
           needOfGuide: "no",
           coordinates: {
-            lat: userLocation?.lat || 0,
-            lng: userLocation?.lng || 0,
+            lat: userLocation?.lat || 27.7172,
+            lng: userLocation?.lng || 85.324,
           },
           distance: 0,
         },
         {
-          name: "Sample Moderate Trek Near " + location,
+          name: "Sample Forest Trek Near " + location,
           difficulty: "moderate",
           color: "orange",
-          district: "Morang",
-          duration: "8 hrs",
-          image: "www.facebook.com/image/2",
-          altitude: "800 - 1200m",
-          scenes: ["Mountain views", "Forest trails", "Rocky paths"],
+          district: "Mountain District",
+          duration: "6-8 hrs",
+          image:
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+          altitude: "600 - 1400m",
+          scenes: [
+            "Dense forests",
+            "Rocky ridges",
+            "Mountain streams",
+            "Wildlife spotting",
+          ],
           thingsToKnowBeforeVisiting:
-            "Good fitness required. Carry proper gear.",
-          currency: "NPR/USD",
-          estimatedBudget: "150-300",
-          availabilityOfRoadTransport: "no",
-          needOfGuide: "yes",
+            "Moderate fitness required. Carry rain gear and first aid. Inform someone about your trek.",
+          currency: "USD",
+          estimatedBudget: "100-200",
+          availabilityOfRoadTransport: "partial",
+          needOfGuide: "recommended",
           coordinates: {
-            lat: (userLocation?.lat || 0) + 0.01,
-            lng: (userLocation?.lng || 0) + 0.01,
+            lat: (userLocation?.lat || 27.7172) + 0.01,
+            lng: (userLocation?.lng || 85.324) + 0.01,
           },
           distance: userLocation ? 1.5 : 0,
         },
+        {
+          name: " Sample Summit Challenge Near " + location,
+          difficulty: "hard",
+          color: "red",
+          district: "High Altitude District",
+          duration: "2-3 days",
+          image:
+            "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400",
+          altitude: "1400 - 3200m",
+          scenes: [
+            "Snow-capped peaks",
+            "Alpine meadows",
+            "Glacier views",
+            "Dramatic cliffs",
+          ],
+          thingsToKnowBeforeVisiting:
+            "Expert level trek. Professional guide mandatory. Weather dependent. Proper mountaineering gear required.",
+          currency: "USD",
+          estimatedBudget: "400-800",
+          availabilityOfRoadTransport: "no",
+          needOfGuide: "yes",
+          coordinates: {
+            lat: (userLocation?.lat || 27.7172) + 0.02,
+            lng: (userLocation?.lng || 85.324) + 0.02,
+          },
+          distance: userLocation ? 3.2 : 0,
+        },
+        {
+          name: "Sample Waterfall Circuit Near " + location,
+          difficulty: "easy",
+          color: "green",
+          district: "Valley District",
+          duration: "4-5 hrs",
+          image:
+            "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=400",
+          altitude: "300 - 800m",
+          scenes: [
+            "Multiple waterfalls",
+            "Swimming spots",
+            "Lush vegetation",
+            "Picnic areas",
+          ],
+          thingsToKnowBeforeVisiting:
+            "Carry swimwear if you plan to swim. Slippery rocks near waterfalls - be careful.",
+          currency: "USD",
+          estimatedBudget: "40-100",
+          availabilityOfRoadTransport: "yes",
+          needOfGuide: "no",
+          coordinates: {
+            lat: (userLocation?.lat || 27.7172) - 0.005,
+            lng: (userLocation?.lng || 85.324) + 0.005,
+          },
+          distance: userLocation ? 0.8 : 0,
+        },
       ];
-      setTrekPlaces(samplePlaces);
+
+      const sortedSamplePlaces = sortTrekPlaces(
+        samplePlaces,
+        userLocation?.lat,
+        userLocation?.lng
+      );
+      setTrekPlaces(sortedSamplePlaces);
+      setCurrentAIService("Sample Data");
     } finally {
       setIsLoading(false);
     }
@@ -273,12 +642,12 @@ function BeginYourJourney() {
               coordinates: place.coordinates,
               difficulty: place.difficulty,
               currency: place.currency,
-              image: place.image,
               transport: place.availabilityOfRoadTransport,
               guide: place.needOfGuide,
               advice: place.thingsToKnowBeforeVisiting,
               scenes: place.scenes,
               distance: place.distance,
+              galleryImages: place.galleryImages, // NEW: Pass gallery images
             },
           })
         }
@@ -447,12 +816,17 @@ function BeginYourJourney() {
       {trekPlaces.length > 0 && (
         <div className="w-full max-w-7xl">
           <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Found {trekPlaces.length} trails • Sorted by distance & difficulty
+            <h3 className="text-2xl font-semibold text-gray-800">
+              Found {trekPlaces.length} trails
             </h3>
             <p className="text-sm text-gray-600">
               Closest and easiest trails appear first
             </p>
+            {currentAIService && (
+              <p className="text-xs text-blue-600 mt-1">
+                ✨ Generated using: {currentAIService}
+              </p>
+            )}
           </div>
           <div className="flex flex-wrap gap-6 justify-center">
             {renderTrekPlaces()}
