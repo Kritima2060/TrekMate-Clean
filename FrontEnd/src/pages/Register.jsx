@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../App.css";
 import { useAuth } from "../store/auth";
+import {toast} from "react-toastify";
 
 const URL = "http://localhost:5555/api/auth/register";
 
@@ -73,12 +74,14 @@ const Register = () => {
           password: "",
           confirmPassword: "",
         });
+        toast.success("Registration Successful");
 
         // redirect to login
         navigate("/login");
       } else {
         console.error("Server responded with error:", responseData.extraDetails);
         // setError(responseData.extraDetails);
+        toast.error(responseData.extraDetails? responseData.extraDetails : responseData.message);
       }
     } catch (error) {
       console.error("Error during registration:", error);
