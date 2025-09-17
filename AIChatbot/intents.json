@@ -1,0 +1,348 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Namaste",
+        "Hi",
+        "Hey",
+        "Good morning",
+    "Good evening",
+    "Good afternoon",
+    "Greetings",
+        
+        "How are you",
+        "Is anyone there?",
+        "Hello"
+       
+      ],
+      "responses": [
+        "Namaste! Welcome to TrekMate.",
+       "Hello! How can I assist you on your trek?" ,
+         "Hi there! Need help with anything?",
+        
+        "Hi there, what can I do for you?",
+          "Hi there! Planning a trek?",
+        "Namaste, how can I help?",
+          "Hey! Ask me anything about treks, weather, or routes."
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you later", "Goodbye"],
+      "responses": [
+       "Take care! Happy trekking!",
+        "See you later, thanks for visiting",
+        "Goodbye! Safe travels.",
+        "See you next time on the trail!"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "features",
+      "patterns": [
+        "I want to go trekking",
+  "Can you suggest me a trek?",
+  "Suggest a trekking route",
+  "Which trek should I choose?",
+  "Help me choose a trekking destination",
+  "Tell me where I can trek",
+  "I want to do a trek",
+  "Recommend a trek for me",
+  "Can you help with trekking ideas?",
+  "I’m planning a trek",
+  "Where should I go for trekking?",
+  "I want to start trekking",
+  "Give me a trekking recommendation",
+         "Tell me about the features",
+    "What are the main features?",
+    "What can I do on this site?",
+    "What are the functions of TrekMate?",
+    "List all your features",
+    "What is this app used for?",
+    "How does TrekMate help trekkers?",
+    "What services does TrekMate offer?",
+    "What tools are included?",
+    "Show me the features",
+    "Explain the key functions",
+    "What’s special about this website?",
+    "What can I use TrekMate for?",
+    "Why should I use TrekMate?",
+    "Is this just for trekking?"
+      ],
+      "responses": [
+        "Sure! For beginners, Ghorepani Poon Hill and Mardi Himal are great options.",
+  "You can try Everest Base Camp, Annapurna Base Camp, or Langtang Valley depending on your experience.",
+  "If it's your first time, I recommend easy to moderate treks like Ghandruk or Poon Hill.",
+  "Experienced trekkers love Annapurna Circuit or Manaslu Circuit. Want details?",
+  "Let me help! Would you prefer short treks or long adventures?",
+        "TrekMate lets you chat with an AI guide, book treks and hotels, view maps, and get emergency support.",
+        "Our features include real-time weather, AI chatbot recommendation,book trek , book hotel and lodge, emergency SOS, and available in 24/7.",
+         "Start with an easy trek, break in your boots early, and don't overpack.",
+        "Stay flexible with your plan — weather and altitude may change your schedule.",
+        "TrekMate offers route suggestions, hotel booking, gear checklists, emergency SOS, weather updates, and more!",
+    "Our app features AI chat support, interactive maps, real-time weather, and permit guidance.",
+    "You can discover trekking routes, get travel tips, check local weather, and even call for emergency help — all in one place.",
+    "TrekMate helps you plan your trek, stay safe, book hotels, and get local recommendations instantly.",
+    "It’s your all-in-one digital assistant for trekking in Nepal — from trail maps to live support."
+      ]
+    },
+    {
+      "tag": "how_to_use",
+      "patterns": [
+        "How do I use this website?",
+        "Is there a guide to use TrekMate?",
+        "Help me navigate the site",
+        "I'm new here"
+      ],
+      "responses": [
+        "You can use the top menu to explore treks, hotels, emergency options, and chat with our AI guide.",
+        "Need help? Just type your question here and I’ll guide you!"
+      ]
+    },
+    {
+      "tag": "account",
+      "patterns": [
+        "How do I create an account?",
+        "Sign up help",
+        "I forgot my password",
+        "How do I log in?"
+      ],
+      "responses": [
+        "You can sign up using your phone, Google, or Facebook from the login page.",
+        "Forgot your password? Click 'Forgot Password' on the login page to reset it."
+      ]
+    },
+    {
+      "tag": "payment",
+      "patterns": [
+        "How do I pay?",
+        "Can I use eSewa or Khalti?",
+        "Payment options available?",
+        "Is online payment supported?"
+      ],
+      "responses": [
+        "Yes! You can pay using eSewa, Khalti, bank transfer according to the QR code .",
+        "We support secure online payments via various platforms."
+      ]
+    },
+    {
+      "tag": "privacy",
+      "patterns": [
+        "Is my data safe?",
+        "How do you use my information?",
+        "Do you collect personal data?",
+        "What about privacy?"
+      ],
+      "responses": [
+        "We take privacy seriously. Your data is encrypted and never shared without permission.",
+        "You can view our full Privacy Policy at the bottom of the homepage."
+      ]
+    },
+    {
+      "tag": "languages",
+      "patterns": [
+        "Is this site available in Nepali?",
+        "Can I use it in my own language?",
+        "Change language to Nepali",
+        "Language options"
+      ],
+      "responses": [
+        "Currently, we support English and Nepali. More languages coming soon!",
+        "To change the language, use the dropdown menu at the top of the page."
+      ]
+    },
+    {
+      "tag": "get_started",
+      "patterns": [
+        "How do I start?",
+        "I want to plan my first trek",
+        "Where do I begin?",
+        "Getting started help"
+      ],
+      "responses": [
+        "Start by creating an account and exploring trek options under the 'Trek' tab.",
+        "Click on 'Trek Finder' and answer a few questions — we’ll match you with the best routes."
+      ]
+    },
+    {
+      "tag": "faq",
+      "patterns": [
+        "Where is the FAQ?",
+        "I want to see frequently asked questions",
+        "Help section",
+        "Any user guide or FAQ?"
+      ],
+      "responses": [
+        "You can find our FAQ section at the bottom of the homepage or in the Help menu.",
+        "We’ve covered common questions there — or just ask me!"
+      ]
+    },
+    {
+      "tag":"trek_info",
+      "patterns": [
+        "Tell me about trekking options",
+        "Which treks are available?",
+
+        "Where can I go for trekking?",
+           "Suggest a trekking route"
+      ],
+      "responses": [
+         "We offer treks to Everest Base Camp, Annapurna Circuit, Langtang Valley ,Gokyo Lakes Trek,Everest Three Passes Trek,",
+          "Some popular treks include Mardi Himal, Manaslu Circuit, and Gosaikunda."
+      ]
+    },
+    {
+  "tag": "popular_treks",
+  "patterns": [
+    "What are the popular trekking regions in Nepal?",
+    "",
+    "Which treks are best for beginners?",
+    "Tell me about Everest Base Camp trek",
+    "What's the most famous trek in Nepal?",
+    "Recommend a good trekking route",
+    "Name top trekking destinations in Nepal",
+    "Where can I go for a short trek?",
+    "Which treks are best for adventure?",
+    "What is the best season to trek in Annapurna?",
+    "How long is the Langtang Valley trek?",
+    "Is Manaslu trek difficult?",
+    "Tell me about Upper Mustang trek",
+    "What's special about Mardi Himal trek?",
+    "Can I do solo trekking in Nepal?",
+    "Which treks offer cultural experience?",
+    "Is Everest Base Camp trek crowded?",
+    "Do you have a list of best treks in Nepal?"
+  ],
+  "responses": [
+    "Some of the most popular treks in Nepal include Everest Base Camp, Annapurna Circuit, Langtang Valley, Manaslu Circuit, and Mardi Himal.",
+    "If you're a beginner, I recommend Ghorepani Poon Hill or Langtang Valley trek for a short and scenic experience.",
+    "Everest Base Camp trek is world-famous and offers stunning views of the Himalayas. It usually takes around 12–14 days.",
+    "Looking for culture and nature? Try the Upper Mustang trek or the Manaslu Circuit for a unique experience.",
+    "Mardi Himal trek is a short and quiet trail offering close-up views of Machapuchare and Annapurna range.",
+    "The best seasons for trekking in Nepal are spring (March–May) and autumn (September–November).",
+    "Yes, you can do solo trekking in many areas like Annapurna and Langtang, but some regions like Manaslu require a guide.",
+    "For high adventure, Everest Three Passes or Dhaulagiri Circuit trek are great options!"
+  ]
+},
+     {
+      "tag": "hotel_booking",
+      "patterns": [
+        "Can I book a hotel?",
+        "How do I find a hotel?",
+        "Is there accommodation available?",
+        "I need a place to stay"
+      ],
+      "responses": [
+        "Yes! You can book hotels near your trekking point through our app.",
+        "We partner with local lodges. Let me know your destination and we’ll assist."
+      ]
+    },
+    {
+      "tag": "weather",
+      "patterns": [
+        "What's the weather like?",
+        "Show me current weather",
+        "Is it raining today?",
+        "Forecast for tomorrow"
+      ],
+      "responses": [
+        "YouCan you suggest some famous treks? can check the real-time weather info in the Weather section of the app.",
+        "Weather data is updated hourly. Make sure to carry rain gear just in case!"
+      ]
+    },
+     {
+      "tag": "emergency",
+      "patterns": [
+        "I need help",
+        "Emergency",
+        "I'm lost",
+        "Call rescue team",
+        "SOS"
+      ],
+      "responses": [
+        "We’ve triggered an emergency request. Please stay calm. Help is on the way!",
+        "Sending your coordinates to the nearest emergency team. Stay where you are!"
+      ]
+    },
+    {
+  "tag": "trekking_weather",
+  "patterns": [
+    "What is the best weather for trekking in Nepal?",
+    "When is the monsoon season in Nepal?",
+    "Is it safe to trek during the rainy season?",
+    "What weather can I expect in Everest Base Camp in spring?",
+    "How cold does it get during Annapurna trek?",
+    "Do I need special clothes for trekking in winter?",
+    "What is the temperature like on Langtang trek?",
+    "Can trekking be done during winter?",
+    "Is trekking possible in the summer?",
+    "How does the weather change with altitude?",
+    "What are the best months to avoid rain while trekking?",
+    "Does it snow on the Manaslu trek?",
+    "How should I prepare for weather changes on trek?",
+    "Will I face heavy winds during trekking?",
+    "Is the weather unpredictable in the Himalayas?",
+    "Should I carry rain gear while trekking?",
+    "How hot does it get at lower elevations?",
+    "What kind of weather gear is essential for trekking?",
+    "Is there a big difference between day and night temperature?",
+    "How do I check weather updates during trekking?"
+  ],
+  "responses": [
+    "The best weather for trekking in Nepal is during spring (March to May) and autumn (September to November) when skies are clear and temperatures are moderate.",
+    "The monsoon season in Nepal is from June to August, bringing heavy rainfall and slippery trails, so trekking is less recommended during this time.",
+    "Trekking during the rainy season can be risky due to landslides and slippery paths, so it's generally safer to avoid it unless you are very experienced.",
+    "In spring, Everest Base Camp experiences mild temperatures during the day with occasional chilly winds, perfect for trekking.",
+    "During the Annapurna trek, temperatures can drop below freezing at higher elevations, especially at night, so warm clothing is essential.",
+    "Yes, special winter clothes like insulated jackets, thermal wear, and gloves are necessary if trekking in winter months.",
+    "Langtang trek temperatures vary; it can be warm during the day at lower elevations but very cold at night and higher altitudes.",
+    "Winter trekking is possible but challenging due to snow and cold; be prepared with the right gear and check weather forecasts.",
+    "Summer trekking is possible but expect hot temperatures at lower elevations and heavy rain in monsoon months.",
+    "Weather gets colder and windier as you gain altitude, so layering your clothes is important.",
+    "The best months to avoid rain are March to May and September to November.",
+    "Yes, it can snow on the Manaslu trek, especially in late autumn and winter.",
+    "Prepare for sudden weather changes by carrying waterproof gear, warm layers, and checking local forecasts.",
+    "Heavy winds can occur at higher elevations, so windproof jackets and hats are recommended.",
+    "Weather in the Himalayas can be unpredictable; always be ready for sudden changes.",
+    "Carrying rain gear like a waterproof jacket and pants is highly recommended regardless of the season.",
+    "Lower elevations can get quite warm during the day, sometimes above 25°C (77°F).",
+    "Essential weather gear includes layered clothing, waterproof jacket, sun protection, and insulated gloves.",
+    "Yes, nights can be significantly colder than days, sometimes dropping below freezing even when days are sunny.",
+    "You can check weather updates through trekking agencies, mobile apps, or local guides during your trek."
+  ]
+},
+    {
+      "tag": "contact",
+      "patterns": [
+        "How can I contact support?",
+        "I need your phone number",
+        "Email address please",
+        "Reach TrekMate team"
+      ],
+      "responses": [
+        "You can contact us at support@trekmate.app or call +977-9800000000",
+        "Our support team is available 24/7 through the app’s chat or call feature."
+      ]
+    },
+     {
+      "tag": "cost_info",
+      "patterns": [
+        "How much does it cost?",
+        "Trek cost for Everest?",
+        "Budget for Annapurna?",
+        "Give me the price list"
+      ],
+      "responses": [
+        "The cost depends on trek length and services. Typical treks range from $300 to $1500.",
+        "Visit the Pricing section in our app to explore detailed packages."
+      ]
+    }
+
+
+  ]
+}

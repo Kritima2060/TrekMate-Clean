@@ -15,12 +15,14 @@ import Faqs from "./pages/Faqs";
 import Contact from "./pages/contact";
 import TrekHome from "./pages/trekHome";
 import Weather from "./Components/WeatherUpdate";
+import Chatbot from "./Components/Chatbot";
 
 
 function App() {
   return (
     <Router>
       <Navbar />
+      <Chatbot/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<AboutUs/>}/>
@@ -36,6 +38,7 @@ function App() {
         <Route path="/faqs" element={<Faqs/>}/>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/weather" element={<Weather/>}/>
+       
         
       </Routes>
       <Footer/>

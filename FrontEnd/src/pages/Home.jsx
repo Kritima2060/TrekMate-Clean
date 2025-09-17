@@ -57,6 +57,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      
 
 
       <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-50">
@@ -71,6 +72,7 @@ const HomePage = () => {
             className="w-12 h-12 md:w-12 md:h-12"
           />
         </Link>
+        {/* <Link to="/Chatbot"> */}
         <button
           className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
           title="AI Assistant"
@@ -87,6 +89,7 @@ const HomePage = () => {
             />
           </svg>
         </button>
+        {/* </Link> */}
       </div>
 
 
