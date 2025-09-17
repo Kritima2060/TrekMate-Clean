@@ -2,6 +2,7 @@ import "../App.css";
 import React, { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function BeginYourJourney() {
   const [trekPlaces, setTrekPlaces] = useState([]);
@@ -353,6 +354,7 @@ function BeginYourJourney() {
     <div className="min-h-screen bg-neutral-50 flex flex-col items-center gap-8">
       {/* Fixed Buttons */}
       <div className="fixed bottom-8 left-8 flex flex-col gap-3 z-50">
+        <Link to="/emergencyAlert">
         <button
           // onClick={handleReportClick}
           className="w-12 h-12 bg-red-600 shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
@@ -360,6 +362,7 @@ function BeginYourJourney() {
         >
           🚨
         </button>
+        </Link>
         <button
           className="w-12 h-12 bg-white shadow-lg hover:shadow-xl rounded-full flex items-center justify-center hover:scale-110 transition-all duration-200 border border-slate-100 cursor-pointer"
           title="AI Assistant"
