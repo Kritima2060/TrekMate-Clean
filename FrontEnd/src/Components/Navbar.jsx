@@ -36,12 +36,7 @@ const Navbar = () => {
           >
             About Us
           </Link>
-          <Link 
-            to="/faqs" 
-            className="hover:text-zinc-600 hover:scale-105 transition-all duration-200 px-3 py-1 rounded-lg hover:bg-blue-50/50"
-          >
-            FAQs
-          </Link>
+
           <Link 
             to="/contactus" 
             className="hover:text-zinc-600 hover:scale-105 transition-all duration-200 px-3 py-1 rounded-lg hover:bg-blue-50/50"

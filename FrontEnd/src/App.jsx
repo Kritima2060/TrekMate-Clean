@@ -12,10 +12,10 @@ import BeginYourJourney from "./pages/BeginYourJourney";
 import Review from "./pages/Review";
 import Error from "./pages/Error";
 import Faqs from "./pages/Faqs";
-import Contact from "./pages/contact";
+import Contact from "./pages/Contact";
 import TrekHome from "./pages/trekHome";
 import Weather from "./Components/WeatherUpdate";
-
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -34,7 +34,8 @@ function App() {
         <Route path="/beginyourjourney" element={<BeginYourJourney/>}/>
         <Route path="/error" element={<Error/>}/>
         <Route path="/faqs" element={<Faqs/>}/>
-        <Route path="/contact" element={<Contact/>}/>
+        <Route path="/settings" element={<SettingsPage/>}/>
+        <Route path="/contactus" element={<Contact/>}/>
         <Route path="/weather" element={<Weather/>}/>
         
       </Routes>
