@@ -1096,6 +1096,7 @@ width: 60px;
     padding: 10px 10px;
     border-radius: 30px;
     text-align: left;
+    background-color: white;
 }
 
 .chatbox__send--footer {
